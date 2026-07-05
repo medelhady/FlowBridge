@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlowBridge Affiliate Dashboard</title>
+    <meta name="description" content="Affiliate dashboard for FlowBridge partners." />
+    <link rel="stylesheet" href="./affiliate.css" />
+    <link rel="stylesheet" href="./affiliate-dashboard.css" />
+  </head>
+  <body>
+    <main class="dashboard-page">
+      <header class="nav">
+        <a class="brand" href="./index.html" aria-label="FlowBridge home">
+          <span class="brand-mark">F</span>
+          <span>FlowBridge</span>
+        </a>
+        <nav class="nav-links" aria-label="Dashboard navigation">
+          <a href="./affiliate.html">Affiliate page</a>
+          <a href="./index.html">Landing</a>
+        </nav>
+        <a class="nav-cta" href="#payout">Payout</a>
+      </header>
+
+      <section class="dashboard-hero">
+        <div>
+          <p class="eyebrow">Affiliate dashboard</p>
+          <h1>Track referrals, earnings, and payout status.</h1>
+          <p class="lede">Enter your affiliate email or referral code to load your FlowBridge partner dashboard.</p>
+        </div>
+        <form class="lookup-card" id="lookupForm">
+          <label>
+            Email or referral code
+            <input id="lookupValue" type="text" placeholder="you@example.com or FB-CODE-12345" required />
+          </label>
+          <button class="primary-btn" type="submit">Load dashboard</button>
+          <p id="lookupMessage"></p>
+        </form>
+      </section>
+
+      <section class="dashboard-content" id="dashboardContent" hidden>
+        <div class="partner-card">
+          <span>Partner</span>
+          <h2 id="partnerName">Affiliate</h2>
+          <p id="partnerEmail">email@example.com</p>
+          <div class="referral-box">
+            <small>Your referral link</small>
+            <code id="referralLink">https://flow-bridge-nine.vercel.app/?ref=CODE</code>
+            <button class="secondary-btn" type="button" id="copyLink">Copy link</button>
+          </div>
+        </div>
+
+        <div class="dashboard-metrics">
+          <article>
+            <span>Paid referrals</span>
+            <strong id="dashReferrals">0</strong>
+          </article>
+          <article>
+            <span>Total earnings</span>
+            <strong id="dashEarnings">$0</strong>
+          </article>
+          <article>
+            <span>Next bonus</span>
+            <strong id="dashNextBonus">10 referrals</strong>
+          </article>
+          <article>
+            <span>Payout status</span>
+            <strong id="dashPayoutStatus">Locked</strong>
+          </article>
+        </div>
+
+        <section class="progress-card">
+          <div class="card-headline">
+            <div>
+              <p class="eyebrow">Milestones</p>
+              <h2>Grow referrals. Unlock more cash.</h2>
+            </div>
+            <strong id="progressText">0 / 10</strong>
+          </div>
+          <div class="progress-track"><i id="progressBar"></i></div>
+          <div class="milestone-row">
+            <span>10 referrals: +$25</span>
+            <span>20 referrals: +$50</span>
+          </div>
+        </section>
+
+        <section class="payout-card" id="payout">
+          <div>
+            <p class="eyebrow">Payout</p>
+            <h2>Request your PayPal payout.</h2>
+            <p id="payoutHelp">Payout unlocks after 10 paid referrals and at least $50 in eligible earnings.</p>
+          </div>
+          <form id="dashboardPayoutForm">
+            <label>
+              PayPal email
+              <input id="dashboardPaypal" type="email" placeholder="paypal@example.com" required />
+            </label>
+            <button class="primary-btn" type="submit" id="dashboardPayoutButton">Request payout</button>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
+    <script src="./affiliate-dashboard.js"></script>
+  </body>
+</html>

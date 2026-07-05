@@ -1,0 +1,171 @@
+.dashboard-page {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.dashboard-hero {
+  min-height: calc(100vh - 74px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 460px);
+  align-items: center;
+  gap: 40px;
+  padding: 42px 0;
+}
+
+.lookup-card,
+.partner-card,
+.dashboard-metrics article,
+.progress-card,
+.payout-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 22px 58px rgba(14, 17, 24, 0.08);
+}
+
+.lookup-card {
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+}
+
+.lookup-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.dashboard-content {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 80px;
+}
+
+.partner-card {
+  padding: 24px;
+}
+
+.partner-card > span,
+.dashboard-metrics span {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.partner-card h2 {
+  margin: 10px 0 6px;
+}
+
+.referral-box {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.referral-box code {
+  overflow-wrap: anywhere;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-metrics article {
+  padding: 20px;
+}
+
+.dashboard-metrics strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 34px;
+}
+
+.progress-card,
+.payout-card {
+  padding: 24px;
+}
+
+.card-headline,
+.payout-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.card-headline strong {
+  font-size: 28px;
+}
+
+.progress-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf1f7;
+}
+
+.progress-track i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transition: width 0.35s ease;
+}
+
+.milestone-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.payout-card form {
+  min-width: 320px;
+}
+
+.payout-card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 920px) {
+  .dashboard-hero,
+  .dashboard-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .payout-card,
+  .card-headline {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .payout-card form {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-page {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .dashboard-hero {
+    min-height: auto;
+  }
+
+  .milestone-row {
+    flex-direction: column;
+  }
+}
