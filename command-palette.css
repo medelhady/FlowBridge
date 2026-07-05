@@ -911,6 +911,31 @@ h3 {
   padding: 22px;
 }
 
+.affiliate-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 30px;
+  margin-top: 82px;
+  margin-bottom: 82px;
+  border: 1px solid rgba(21, 93, 252, 0.22);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(21, 93, 252, 0.13), transparent 30%),
+    #fff;
+  box-shadow: var(--shadow);
+}
+
+.affiliate-cta div {
+  max-width: 760px;
+}
+
+.affiliate-cta p:not(.eyebrow) {
+  color: var(--muted);
+  line-height: 1.62;
+}
+
 @keyframes revealText {
   0%,
   15% {
@@ -1189,5 +1214,10 @@ h3 {
 
   .terminal-body {
     font-size: 12px;
+  }
+
+  .affiliate-cta {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
