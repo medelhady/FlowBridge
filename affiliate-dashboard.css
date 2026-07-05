@@ -200,6 +200,42 @@
   font-size: 28px;
 }
 
+.card-headline p:not(.eyebrow) {
+  max-width: 560px;
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.mission-score {
+  min-width: 132px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  text-align: center;
+}
+
+.mission-score span {
+  display: block;
+  color: var(--blue);
+  font-size: 30px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.mission-score strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.goal-track {
+  position: relative;
+  padding: 36px 0 30px;
+}
+
 .progress-track {
   height: 14px;
   overflow: hidden;
@@ -214,6 +250,49 @@
   border-radius: inherit;
   background: linear-gradient(90deg, var(--blue), var(--green));
   transition: width 0.35s ease;
+}
+
+.goal-marker {
+  position: absolute;
+  top: 9px;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  min-height: 58px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(14, 17, 24, 0.08);
+  transform: translateX(-50%);
+}
+
+.goal-marker b {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.goal-marker span {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.goal-marker.complete {
+  color: #fff;
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.goal-marker.complete span {
+  color: #d1fae5;
+}
+
+.marker-ten {
+  left: 50%;
+}
+
+.marker-twenty {
+  left: 100%;
 }
 
 .milestone-row {
@@ -234,6 +313,12 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #fff;
+}
+
+.milestone-row span.complete {
+  color: #0b6b51;
+  border-color: rgba(12, 139, 103, 0.32);
+  background: #ecfdf5;
 }
 
 .milestone-row b {

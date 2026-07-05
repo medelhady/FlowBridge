@@ -85,14 +85,28 @@
           <div class="card-headline">
             <div>
               <p class="eyebrow">Milestones</p>
-              <h2>Grow referrals. Unlock more cash.</h2>
+              <h2>Referral mission progress.</h2>
+              <p id="missionText">Reach 10 paid referrals to unlock your first bonus.</p>
             </div>
-            <strong id="progressText">0 / 10</strong>
+            <div class="mission-score">
+              <span id="progressPercent">0%</span>
+              <strong id="progressText">0 / 10</strong>
+            </div>
           </div>
-          <div class="progress-track"><i id="progressBar"></i></div>
+          <div class="goal-track">
+            <div class="progress-track"><i id="progressBar"></i></div>
+            <div class="goal-marker marker-ten" id="markerTen">
+              <b>10</b>
+              <span>+$25</span>
+            </div>
+            <div class="goal-marker marker-twenty" id="markerTwenty">
+              <b>20</b>
+              <span>+$50</span>
+            </div>
+          </div>
           <div class="milestone-row">
-            <span><b>10</b> referrals <strong>+$25</strong></span>
-            <span><b>20</b> referrals <strong>+$50</strong></span>
+            <span id="milestoneTen"><b>10</b> referrals <strong>+$25 bonus</strong></span>
+            <span id="milestoneTwenty"><b>20</b> referrals <strong>+$50 bonus</strong></span>
           </div>
         </section>
 

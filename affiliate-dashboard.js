@@ -27,6 +27,11 @@ function renderAffiliate(affiliate) {
   const nextBonus = referrals >= 20 ? "Unlocked" : referrals >= 10 ? "20 referrals" : "10 referrals";
   const progressTarget = referrals >= 10 ? 20 : 10;
   const progress = Math.min((referrals / progressTarget) * 100, 100);
+  const missionText = referrals >= 20
+    ? "You unlocked every current bonus. Keep scaling your channel."
+    : referrals >= 10
+      ? `${20 - referrals} more paid referrals to unlock the $50 bonus.`
+      : `${10 - referrals} more paid referrals to unlock the $25 bonus and payout access.`;
 
   document.querySelector("#partnerName").textContent = affiliate.name || "Affiliate";
   document.querySelector("#welcomeName").textContent = affiliate.name || "partner";
@@ -38,7 +43,13 @@ function renderAffiliate(affiliate) {
   document.querySelector("#dashNextBonus").textContent = nextBonus;
   document.querySelector("#dashPayoutStatus").textContent = unlocked ? "Unlocked" : "Locked";
   document.querySelector("#progressText").textContent = `${referrals} / ${progressTarget}`;
+  document.querySelector("#progressPercent").textContent = `${Math.round(progress)}%`;
+  document.querySelector("#missionText").textContent = missionText;
   document.querySelector("#progressBar").style.width = `${progress}%`;
+  document.querySelector("#milestoneTen").classList.toggle("complete", referrals >= 10);
+  document.querySelector("#milestoneTwenty").classList.toggle("complete", referrals >= 20);
+  document.querySelector("#markerTen").classList.toggle("complete", referrals >= 10);
+  document.querySelector("#markerTwenty").classList.toggle("complete", referrals >= 20);
   document.querySelector("#payoutHelp").textContent = unlocked
     ? "Your payout is unlocked. Add your PayPal email to request payment."
     : "Payout unlocks after 10 paid referrals and at least $50 in eligible earnings.";
