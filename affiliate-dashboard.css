@@ -13,6 +13,11 @@
   padding: 42px 0;
 }
 
+.dashboard-loaded .dashboard-hero {
+  min-height: auto;
+  padding-bottom: 24px;
+}
+
 .dashboard-hero h1 {
   max-width: 720px;
   font-size: clamp(46px, 6vw, 72px);
@@ -60,6 +65,10 @@
   display: grid;
   gap: 16px;
   padding-bottom: 80px;
+}
+
+.dashboard-content[hidden] {
+  display: none;
 }
 
 .partner-card {

@@ -16,10 +16,10 @@ function calculateEarnings(referrals) {
 }
 
 function renderAffiliate(affiliate) {
-  const referrals = affiliate.paid_referrals || 0;
+  const referrals = Number(affiliate.paid_referrals || 0);
   const earnings = Number(affiliate.total_earnings || calculateEarnings(referrals));
   const unlocked = referrals >= 10 && earnings >= 50;
-  const code = affiliate.referral_code;
+  const code = affiliate.referral_code || "";
   const link = `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
   const nextBonus = referrals >= 20 ? "Unlocked" : referrals >= 10 ? "20 referrals" : "10 referrals";
   const progressTarget = referrals >= 10 ? 20 : 10;
@@ -39,7 +39,12 @@ function renderAffiliate(affiliate) {
     : "Payout unlocks after 10 paid referrals and at least $50 in eligible earnings.";
 
   payoutButton.disabled = !unlocked;
-  dashboardContent.hidden = false;
+  dashboardContent.removeAttribute("hidden");
+  document.body.classList.add("dashboard-loaded");
+
+  window.setTimeout(() => {
+    dashboardContent.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 120);
 }
 
 lookupForm.addEventListener("submit", async (event) => {
@@ -49,18 +54,24 @@ lookupForm.addEventListener("submit", async (event) => {
 
   lookupMessage.textContent = "Loading dashboard...";
 
-  const column = value.includes("@") ? "email" : "referral_code";
-  const { data, error } = await db.from("affiliates").select("*").eq(column, value).single();
+  try {
+    const column = value.includes("@") ? "email" : "referral_code";
+    const { data, error } = await db.from("affiliates").select("*").eq(column, value).single();
 
-  if (error || !data) {
-    lookupMessage.textContent = "Affiliate account not found.";
-    dashboardContent.hidden = true;
-    return;
+    if (error || !data) {
+      lookupMessage.textContent = "Affiliate account not found.";
+      dashboardContent.setAttribute("hidden", "");
+      document.body.classList.remove("dashboard-loaded");
+      return;
+    }
+
+    currentAffiliate = data;
+    renderAffiliate(data);
+    lookupMessage.textContent = "Dashboard loaded. Scrolling to your stats...";
+  } catch (error) {
+    lookupMessage.textContent = "Dashboard could not load. Refresh and try again.";
+    console.error(error);
   }
-
-  currentAffiliate = data;
-  lookupMessage.textContent = "Dashboard loaded.";
-  renderAffiliate(data);
 });
 
 document.querySelector("#copyLink").addEventListener("click", async () => {
