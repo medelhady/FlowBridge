@@ -44,16 +44,23 @@
       </section>
 
       <section class="dashboard-content" id="dashboardContent" hidden>
-        <div class="partner-card">
-          <span>Partner</span>
-          <h2 id="partnerName">Affiliate</h2>
-          <p id="partnerEmail">email@example.com</p>
+        <section class="partner-hero-card">
+          <div class="partner-identity">
+            <span class="avatar" id="partnerAvatar">F</span>
+            <div>
+              <span>Partner profile</span>
+              <h2 id="partnerName">Affiliate</h2>
+              <p id="partnerEmail">email@example.com</p>
+            </div>
+          </div>
           <div class="referral-box">
             <small>Your referral link</small>
-            <code id="referralLink">https://flow-bridge-nine.vercel.app/?ref=CODE</code>
-            <button class="secondary-btn" type="button" id="copyLink">Copy link</button>
+            <div class="link-copy-row">
+              <code id="referralLink">https://flow-bridge-nine.vercel.app/?ref=CODE</code>
+              <button class="secondary-btn" type="button" id="copyLink">Copy</button>
+            </div>
           </div>
-        </div>
+        </section>
 
         <div class="dashboard-metrics">
           <article>
@@ -84,8 +91,8 @@
           </div>
           <div class="progress-track"><i id="progressBar"></i></div>
           <div class="milestone-row">
-            <span>10 referrals: +$25</span>
-            <span>20 referrals: +$50</span>
+            <span><b>10</b> referrals <strong>+$25</strong></span>
+            <span><b>20</b> referrals <strong>+$50</strong></span>
           </div>
         </section>
 

@@ -30,6 +30,7 @@ function renderAffiliate(affiliate) {
 
   document.querySelector("#partnerName").textContent = affiliate.name || "Affiliate";
   document.querySelector("#welcomeName").textContent = affiliate.name || "partner";
+  document.querySelector("#partnerAvatar").textContent = (affiliate.name || affiliate.email || "F").slice(0, 1).toUpperCase();
   document.querySelector("#partnerEmail").textContent = affiliate.email;
   document.querySelector("#referralLink").textContent = link;
   document.querySelector("#dashReferrals").textContent = referrals;

@@ -16,8 +16,7 @@
 .dashboard-loaded .dashboard-hero {
   min-height: auto;
   grid-template-columns: 1fr;
-  padding: 28px 0 18px;
-  border-bottom: 1px solid var(--line);
+  padding: 30px 0 22px;
 }
 
 .dashboard-welcome[hidden],
@@ -46,7 +45,7 @@
 }
 
 .lookup-card,
-.partner-card,
+.partner-hero-card,
 .dashboard-metrics article,
 .progress-card,
 .payout-card {
@@ -80,7 +79,7 @@
 
 .dashboard-content {
   display: grid;
-  gap: 16px;
+  gap: 18px;
   padding-bottom: 80px;
 }
 
@@ -88,11 +87,37 @@
   display: none;
 }
 
-.partner-card {
+.partner-hero-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(360px, 1.2fr);
+  gap: 22px;
+  align-items: center;
   padding: 24px;
+  background:
+    radial-gradient(circle at 92% 16%, rgba(21, 93, 252, 0.14), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f8fbff);
 }
 
-.partner-card > span,
+.partner-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue), #0e1118);
+  box-shadow: 0 18px 38px rgba(21, 93, 252, 0.22);
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.partner-identity span:not(.avatar),
 .dashboard-metrics span {
   color: var(--blue);
   font-size: 12px;
@@ -100,23 +125,40 @@
   text-transform: uppercase;
 }
 
-.partner-card h2 {
-  margin: 10px 0 6px;
+.partner-identity h2 {
+  margin: 8px 0 4px;
+  font-size: 34px;
+}
+
+.partner-identity p {
+  margin-bottom: 0;
+  color: var(--muted);
 }
 
 .referral-box {
   display: grid;
   gap: 10px;
-  margin-top: 20px;
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .referral-box code {
   overflow-wrap: anywhere;
   font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.link-copy-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
 }
 
 .dashboard-metrics {
@@ -126,18 +168,24 @@
 }
 
 .dashboard-metrics article {
+  position: relative;
+  overflow: hidden;
   padding: 20px;
+  background:
+    linear-gradient(180deg, rgba(21, 93, 252, 0.05), rgba(255, 255, 255, 0) 42%),
+    #fff;
 }
 
 .dashboard-metrics strong {
   display: block;
   margin-top: 10px;
-  font-size: 34px;
+  font-size: 38px;
+  line-height: 1;
 }
 
 .progress-card,
 .payout-card {
-  padding: 24px;
+  padding: 26px;
 }
 
 .card-headline,
@@ -153,7 +201,7 @@
 }
 
 .progress-track {
-  height: 12px;
+  height: 14px;
   overflow: hidden;
   border-radius: 999px;
   background: #edf1f7;
@@ -172,13 +220,36 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 12px;
+  margin-top: 14px;
   color: var(--muted);
   font-weight: 850;
 }
 
+.milestone-row span {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.milestone-row b {
+  color: var(--ink);
+}
+
+.milestone-row strong {
+  color: var(--green);
+}
+
 .payout-card form {
   min-width: 320px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
 }
 
 .payout-card p {
@@ -188,6 +259,7 @@
 
 @media (max-width: 920px) {
   .dashboard-hero,
+  .partner-hero-card,
   .dashboard-metrics {
     grid-template-columns: 1fr;
   }
@@ -233,5 +305,26 @@
 
   .milestone-row {
     flex-direction: column;
+  }
+
+  .partner-hero-card,
+  .progress-card,
+  .payout-card {
+    padding: 18px;
+  }
+
+  .partner-identity {
+    align-items: flex-start;
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+
+  .link-copy-row {
+    grid-template-columns: 1fr;
   }
 }
