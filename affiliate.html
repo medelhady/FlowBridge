@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlowBridge Affiliates | Earn $5 Per Paid Referral</title>
+    <meta
+      name="description"
+      content="Join the FlowBridge affiliate program. Earn $5 for every paid referral, unlock milestone bonuses, and request payouts through PayPal."
+    />
+    <link rel="stylesheet" href="./affiliate.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="nav">
+        <a class="brand" href="./command-palette.html" aria-label="FlowBridge home">
+          <span class="brand-mark">F</span>
+          <span>FlowBridge</span>
+        </a>
+        <nav class="nav-links" aria-label="Affiliate navigation">
+          <a href="#how">How it works</a>
+          <a href="#rewards">Rewards</a>
+          <a href="#payout">Payout</a>
+        </nav>
+        <a class="nav-cta" href="#join">Join program</a>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">FlowBridge affiliate program</p>
+          <h1>Earn from every developer you bring to FlowBridge.</h1>
+          <p class="lede">
+            Share FlowBridge with developers, creators, and technical teams. Earn $5 for every paid subscriber, then unlock extra milestone bonuses as your referrals grow.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#join">Become an affiliate</a>
+            <a class="secondary-btn" href="#rewards">View rewards</a>
+          </div>
+          <p class="trust">Payouts open after 10 new paid users. PayPal supported.</p>
+        </div>
+
+        <div class="earnings-card" aria-label="Affiliate earnings preview">
+          <div class="earnings-top">
+            <span>Live earnings preview</span>
+            <strong id="paidUsers">10</strong>
+          </div>
+          <label for="referralRange">Paid referrals</label>
+          <input id="referralRange" type="range" min="1" max="40" value="10" />
+          <div class="earnings-total">
+            <small>Estimated payout</small>
+            <strong id="estimatedPayout">$75</strong>
+          </div>
+          <div class="bonus-track">
+            <div class="bonus-step active" data-step="10">
+              <span>10 referrals</span>
+              <strong>+$25</strong>
+            </div>
+            <div class="bonus-step" data-step="20">
+              <span>20 referrals</span>
+              <strong>+$50</strong>
+            </div>
+          </div>
+          <button class="primary-btn payout-trigger" type="button" id="openPayout">
+            Request payout
+          </button>
+          <p class="payout-note" id="payoutNote">Payout unlocked. Add your PayPal to request payment.</p>
+        </div>
+      </section>
+
+      <section class="stats-strip" id="rewards" aria-label="Affiliate rewards">
+        <article>
+          <span>Commission</span>
+          <strong>$5</strong>
+          <p>For every referred user who becomes a paid subscriber.</p>
+        </article>
+        <article>
+          <span>10 referrals</span>
+          <strong>+$25</strong>
+          <p>Bonus when you reach 10 paid referred users.</p>
+        </article>
+        <article>
+          <span>20 referrals</span>
+          <strong>+$50</strong>
+          <p>Additional milestone bonus when you reach 20 paid referred users.</p>
+        </article>
+        <article>
+          <span>Payout minimum</span>
+          <strong>$50</strong>
+          <p>Request money once you reach 10 new paid users.</p>
+        </article>
+      </section>
+
+      <section class="section" id="how">
+        <div class="section-heading">
+          <p class="eyebrow">Simple system</p>
+          <h2>Promote once. Earn on every paid signup.</h2>
+        </div>
+        <div class="steps-grid">
+          <article>
+            <span>01</span>
+            <h3>Join</h3>
+            <p>Create your affiliate account and get a unique referral link for FlowBridge.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Share</h3>
+            <p>Promote the bridge to developers who use Claude, ChatGPT, Gemini, and local terminals.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Earn</h3>
+            <p>Receive $5 per paid subscriber plus milestone bonuses at 10 and 20 referrals.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section payout-section" id="payout">
+        <div class="payout-copy">
+          <p class="eyebrow">Payout rules</p>
+          <h2>Clear payout threshold. No guessing.</h2>
+          <p>
+            When your affiliate account reaches 10 new paid users, the payout request becomes available. Enter your PayPal email and request the balance you earned.
+          </p>
+        </div>
+        <div class="payout-panel">
+          <div class="panel-row">
+            <span>Minimum paid referrals</span>
+            <strong>10 users</strong>
+          </div>
+          <div class="panel-row">
+            <span>Minimum payout</span>
+            <strong>$50</strong>
+          </div>
+          <div class="panel-row">
+            <span>Payment method</span>
+            <strong>PayPal</strong>
+          </div>
+          <button class="primary-btn" type="button" id="openPayoutBottom">Open payout request</button>
+        </div>
+      </section>
+
+      <section class="join-card" id="join">
+        <div>
+          <p class="eyebrow">Start promoting</p>
+          <h2>Bring FlowBridge to developers who hate copy and paste.</h2>
+          <p>Use short videos, debugging demos, newsletters, and developer communities to show the before-and-after.</p>
+        </div>
+        <a class="primary-btn" href="#">Create affiliate account</a>
+      </section>
+    </main>
+
+    <dialog class="payout-modal" id="payoutModal">
+      <form method="dialog">
+        <button class="modal-close" value="close" aria-label="Close payout request">x</button>
+        <p class="eyebrow">Payout request</p>
+        <h2>Request your PayPal payout</h2>
+        <p class="modal-copy">Available after 10 new paid referrals and at least $50 in eligible earnings.</p>
+        <label>
+          PayPal email
+          <input type="email" placeholder="you@example.com" />
+        </label>
+        <label>
+          Affiliate ID
+          <input type="text" placeholder="FB-AFF-1024" />
+        </label>
+        <button class="primary-btn" value="submit">Submit request</button>
+      </form>
+    </dialog>
+
+    <script src="./affiliate.js"></script>
+  </body>
+</html>

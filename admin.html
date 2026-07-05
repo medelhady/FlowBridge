@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlowBridge Admin | Content Control</title>
+    <meta name="description" content="Admin dashboard for controlling FlowBridge landing and affiliate pages." />
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <aside class="sidebar">
+        <a class="brand" href="./command-palette.html">
+          <span class="brand-mark">F</span>
+          <span>FlowBridge</span>
+        </a>
+        <nav class="side-nav" aria-label="Admin navigation">
+          <button class="active" type="button" data-panel="overview">Overview</button>
+          <button type="button" data-panel="landing">Landing Page</button>
+          <button type="button" data-panel="affiliate">Affiliate Page</button>
+          <button type="button" data-panel="pricing">Pricing</button>
+          <button type="button" data-panel="payouts">Payouts</button>
+          <button type="button" data-panel="settings">Settings</button>
+        </nav>
+        <div class="sidebar-card">
+          <span>Live status</span>
+          <strong>2 pages published</strong>
+          <p>Landing and affiliate pages are ready for campaign traffic.</p>
+        </div>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Admin dashboard</p>
+            <h1>Control every page from one place.</h1>
+          </div>
+          <div class="top-actions">
+            <a class="ghost-btn" href="./command-palette.html">Preview landing</a>
+            <a class="ghost-btn" href="./affiliate.html">Preview affiliate</a>
+            <button class="primary-btn" type="button" id="saveChanges">Save changes</button>
+          </div>
+        </header>
+
+        <section class="panel active" id="overview">
+          <div class="metric-grid">
+            <article>
+              <span>Registered users</span>
+              <strong>2,418</strong>
+              <p>Total accounts created across landing and affiliate traffic.</p>
+            </article>
+            <article>
+              <span>Paid subscribers</span>
+              <strong>684</strong>
+              <p>Active users currently paying for FlowBridge.</p>
+            </article>
+            <article>
+              <span>Monthly revenue</span>
+              <strong>$7,936</strong>
+              <p>Estimated MRR from Starter and Pro Duo plans.</p>
+            </article>
+            <article>
+              <span>Affiliate revenue</span>
+              <strong>$2,145</strong>
+              <p>Revenue generated from affiliate referrals this month.</p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="editor-card revenue-card">
+              <div class="card-head">
+                <h2>Revenue snapshot</h2>
+                <span>This month</span>
+              </div>
+              <div class="revenue-row">
+                <span>Starter</span>
+                <strong>$3,276</strong>
+                <i style="--w: 42%"></i>
+              </div>
+              <div class="revenue-row">
+                <span>Pro Duo</span>
+                <strong>$4,660</strong>
+                <i style="--w: 64%"></i>
+              </div>
+              <div class="revenue-row">
+                <span>Affiliate referred</span>
+                <strong>$2,145</strong>
+                <i style="--w: 30%"></i>
+              </div>
+            </article>
+
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Quick controls</h2>
+                <span>Global</span>
+              </div>
+              <div class="control-row">
+                <span>Landing page</span>
+                <label class="switch"><input type="checkbox" checked /><i></i></label>
+              </div>
+              <div class="control-row">
+                <span>Affiliate program</span>
+                <label class="switch"><input type="checkbox" checked /><i></i></label>
+              </div>
+              <div class="control-row">
+                <span>Payout requests</span>
+                <label class="switch"><input type="checkbox" checked /><i></i></label>
+              </div>
+            </article>
+
+            <article class="editor-card activity-card">
+              <div class="card-head">
+                <h2>Recent changes</h2>
+                <span>Today</span>
+              </div>
+              <ol>
+                <li>Updated landing hero headline.</li>
+                <li>Enabled affiliate payout modal.</li>
+                <li>Changed yearly Pro Duo discount copy.</li>
+              </ol>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="landing">
+          <div class="editor-layout">
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Hero content</h2>
+                <span>Landing</span>
+              </div>
+              <label>Eyebrow <input value="The smart bridge between your terminal and AI" /></label>
+              <label>Headline <textarea rows="3">Stop copying terminal errors into AI tabs.</textarea></label>
+              <label>Description <textarea rows="4">FlowBridge connects your local development environment directly to Claude, ChatGPT, and Gemini.</textarea></label>
+              <div class="two-col">
+                <label>Primary CTA <input value="Start 7-day free trial" /></label>
+                <label>Secondary CTA <input value="See workflow" /></label>
+              </div>
+            </article>
+
+            <article class="live-preview">
+              <span>Landing preview</span>
+              <h2>Stop copying errors and code between tools.</h2>
+              <p>Control the public message, CTAs, pricing cards, and workflow copy from this admin screen.</p>
+              <div class="preview-terminal">
+                <code>$ flowbridge bridge --provider claude --return-fix</code>
+                <code>Fix returned to terminal</code>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="affiliate">
+          <div class="editor-layout">
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Affiliate content</h2>
+                <span>Program</span>
+              </div>
+              <label>Page headline <textarea rows="3">Earn from every developer you bring to FlowBridge.</textarea></label>
+              <label>Commission text <input value="Earn $5 for every paid subscriber." /></label>
+              <label>Join CTA <input value="Become an affiliate" /></label>
+              <div class="two-col">
+                <label>10 referral bonus <input value="$25" /></label>
+                <label>20 referral bonus <input value="$50" /></label>
+              </div>
+            </article>
+
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Affiliate rules</h2>
+                <span>Payouts</span>
+              </div>
+              <div class="two-col">
+                <label>Commission per paid user <input value="$5" /></label>
+                <label>Payout unlock referrals <input value="10" /></label>
+              </div>
+              <div class="two-col">
+                <label>Minimum payout <input value="$50" /></label>
+                <label>Payment method <input value="PayPal" /></label>
+              </div>
+              <label>Payout message <textarea rows="4">Payout unlocks after 10 new paid users. Add your PayPal email to request payment.</textarea></label>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="pricing">
+          <div class="pricing-admin">
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Starter</h2>
+                <span>Plan</span>
+              </div>
+              <div class="two-col">
+                <label>Monthly <input value="$9" /></label>
+                <label>Yearly <input value="$79" /></label>
+              </div>
+              <label>Plan description <textarea rows="3">For your main development machine.</textarea></label>
+              <label>Features <textarea rows="5">1 active device&#10;Claude, ChatGPT, and Gemini&#10;Send terminal errors to AI&#10;Return fixes back to terminal</textarea></label>
+            </article>
+
+            <article class="editor-card featured-card">
+              <div class="card-head">
+                <h2>Pro Duo</h2>
+                <span>Best value</span>
+              </div>
+              <div class="two-col">
+                <label>Monthly <input value="$12" /></label>
+                <label>Yearly <input value="$99" /></label>
+              </div>
+              <label>Plan description <textarea rows="3">For work across two active devices.</textarea></label>
+              <label>Features <textarea rows="5">2 active devices&#10;Claude, ChatGPT, and Gemini&#10;Two-way terminal bridge&#10;Priority support</textarea></label>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="payouts">
+          <article class="editor-card">
+            <div class="card-head">
+              <h2>Affiliate payout requests</h2>
+              <span>Review</span>
+            </div>
+            <div class="table">
+              <div class="table-row table-head"><span>Affiliate</span><span>Referrals</span><span>Amount</span><span>Status</span><span>Action</span></div>
+              <div class="table-row"><span>devlaunch</span><span>12</span><span>$85</span><span class="status pending">Pending</span><button>Approve</button></div>
+              <div class="table-row"><span>codetips</span><span>21</span><span>$155</span><span class="status pending">Pending</span><button>Approve</button></div>
+              <div class="table-row"><span>buildfast</span><span>10</span><span>$75</span><span class="status paid">Paid</span><button disabled>Paid</button></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="settings">
+          <div class="editor-layout">
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Site settings</h2>
+                <span>Global</span>
+              </div>
+              <label>Product name <input value="FlowBridge" /></label>
+              <label>Support email <input value="support@flowbridge.dev" /></label>
+              <label>Trial length <input value="7 days" /></label>
+              <div class="control-row">
+                <span>Show annual discount badge</span>
+                <label class="switch"><input type="checkbox" checked /><i></i></label>
+              </div>
+            </article>
+
+            <article class="editor-card">
+              <div class="card-head">
+                <h2>Publishing</h2>
+                <span>Deploy</span>
+              </div>
+              <p class="muted">Use this area later to connect the admin dashboard with your database, CMS, Stripe, and Vercel deployment flow.</p>
+              <button class="primary-btn" type="button">Publish all changes</button>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast">Changes saved locally</div>
+    <script src="./admin.js"></script>
+  </body>
+</html>
