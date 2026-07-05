@@ -4,6 +4,9 @@ const lookupMessage = document.querySelector("#lookupMessage");
 const dashboardContent = document.querySelector("#dashboardContent");
 const payoutForm = document.querySelector("#dashboardPayoutForm");
 const payoutButton = document.querySelector("#dashboardPayoutButton");
+const lookupCard = document.querySelector("#lookupForm");
+const dashboardIntro = document.querySelector(".dashboard-intro");
+const dashboardWelcome = document.querySelector(".dashboard-welcome");
 const db = window.flowbridgeDb;
 
 let currentAffiliate = null;
@@ -26,6 +29,7 @@ function renderAffiliate(affiliate) {
   const progress = Math.min((referrals / progressTarget) * 100, 100);
 
   document.querySelector("#partnerName").textContent = affiliate.name || "Affiliate";
+  document.querySelector("#welcomeName").textContent = affiliate.name || "partner";
   document.querySelector("#partnerEmail").textContent = affiliate.email;
   document.querySelector("#referralLink").textContent = link;
   document.querySelector("#dashReferrals").textContent = referrals;
@@ -40,6 +44,9 @@ function renderAffiliate(affiliate) {
 
   payoutButton.disabled = !unlocked;
   dashboardContent.removeAttribute("hidden");
+  lookupCard.setAttribute("hidden", "");
+  dashboardIntro.setAttribute("hidden", "");
+  dashboardWelcome.removeAttribute("hidden");
   document.body.classList.add("dashboard-loaded");
 
   window.setTimeout(() => {
@@ -61,6 +68,9 @@ lookupForm.addEventListener("submit", async (event) => {
     if (error || !data) {
       lookupMessage.textContent = "Affiliate account not found.";
       dashboardContent.setAttribute("hidden", "");
+      lookupCard.removeAttribute("hidden");
+      dashboardIntro.removeAttribute("hidden");
+      dashboardWelcome.setAttribute("hidden", "");
       document.body.classList.remove("dashboard-loaded");
       return;
     }
