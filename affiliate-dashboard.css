@@ -1,15 +1,26 @@
 .dashboard-page {
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .dashboard-hero {
   min-height: calc(100vh - 74px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 460px);
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 460px);
   align-items: center;
   gap: 40px;
   padding: 42px 0;
+}
+
+.dashboard-hero h1 {
+  max-width: 720px;
+  font-size: clamp(46px, 6vw, 72px);
+  line-height: 1;
+}
+
+.dashboard-hero .lede {
+  max-width: 620px;
 }
 
 .lookup-card,
@@ -27,6 +38,16 @@
   display: grid;
   gap: 14px;
   padding: 24px;
+}
+
+.lookup-card label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.lookup-card input {
+  min-height: 48px;
 }
 
 .lookup-card p {
@@ -145,6 +166,15 @@
     grid-template-columns: 1fr;
   }
 
+  .dashboard-hero {
+    min-height: auto;
+    padding-top: 28px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: clamp(42px, 10vw, 62px);
+  }
+
   .payout-card,
   .card-headline {
     align-items: stretch;
@@ -163,6 +193,16 @@
 
   .dashboard-hero {
     min-height: auto;
+    gap: 22px;
+    padding: 24px 0 34px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: 40px;
+  }
+
+  .lookup-card {
+    padding: 18px;
   }
 
   .milestone-row {
