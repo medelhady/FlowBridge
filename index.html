@@ -3,91 +3,251 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Sync Landing Options</title>
-    <meta name="description" content="Choose between three clean landing page directions for an AI terminal sync product." />
-    <link rel="stylesheet" href="./styles.css" />
+    <title>FlowBridge | AI Terminal Bridge</title>
+    <meta
+      name="description"
+      content="FlowBridge connects your local terminal to Claude, ChatGPT, and Gemini so developers stop copying errors and code between windows."
+    />
+    <link rel="stylesheet" href="./command-palette.css" />
   </head>
   <body>
     <main class="page">
-      <nav class="nav wrap" aria-label="Main navigation">
-        <a class="brand" href="./index.html">
-          <span class="brand-mark">A</span>
-          <span>AI Sync</span>
+      <header class="nav">
+        <a class="brand" href="#" aria-label="FlowBridge home">
+          <span class="brand-mark">F</span>
+          <span>FlowBridge</span>
         </a>
-        <div class="links">
-          <a href="./apple-clean.html">Apple Clean</a>
-          <a href="./stripe-saas.html">Stripe SaaS</a>
-          <a href="./pricing-first.html">Pricing First</a>
+        <div class="nav-status" aria-label="Bridge status">
+          <span></span>
+          <strong>Terminal bridge live</strong>
         </div>
-        <a class="nav-cta" href="./stripe-saas.html">Open best pick</a>
-      </nav>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#workflow">Workflow</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a class="nav-cta" href="#pricing">Start free</a>
+      </header>
 
-      <section class="selector-hero wrap">
-        <p class="eyebrow">Landing page directions</p>
-        <h1>Pick the version that feels right for the US market.</h1>
-        <p class="lede">
-          Three real, responsive landing pages for your AI terminal sync tool. Each one is simple, clean, and conversion-focused.
-        </p>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">The smart bridge between your terminal and AI</p>
+          <h1>
+            Stop copying
+            <span class="dynamic-phrase">
+              <span>terminal errors</span>
+              <span>stack traces</span>
+              <span>code snippets</span>
+              <span>debug context</span>
+            </span>
+            into AI tabs.
+          </h1>
+          <p class="lede">
+            FlowBridge connects your local development environment directly to Claude, ChatGPT, and Gemini. Send context, route prompts, and bring answers back without manual copy and paste.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#pricing">Start 7-day free trial</a>
+            <a class="secondary-btn" href="#workflow">See workflow</a>
+          </div>
+          <p class="trust">No credit card required. Cancel anytime. Built for developers who live in the local terminal.</p>
+        </div>
+
+        <div class="hero-stage" aria-label="Animated product preview">
+          <div class="palette-card">
+            <div class="palette-search">
+              <span class="command-symbol">/</span>
+              <span class="typed-command">Send error to Claude and return the fix</span>
+              <span class="cursor"></span>
+            </div>
+            <div class="command-list">
+              <div class="command-item item-one">
+                <span class="provider-dot chatgpt"></span>
+                <div>
+                  <strong>Ask ChatGPT</strong>
+                  <small>Explain the error fast</small>
+                </div>
+                <kbd>1</kbd>
+              </div>
+              <div class="command-item item-two">
+                <span class="provider-dot claude"></span>
+                <div>
+                  <strong>Route to Claude</strong>
+                  <small>Debug with full context</small>
+                </div>
+                <kbd>2</kbd>
+              </div>
+              <div class="command-item item-three">
+                <span class="provider-dot gemini"></span>
+                <div>
+                  <strong>Compare with Gemini</strong>
+                  <small>Validate the fix</small>
+                </div>
+                <kbd>3</kbd>
+              </div>
+            </div>
+          </div>
+
+          <div class="terminal-card">
+            <div class="terminal-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="terminal-body">
+              <p><b>$</b> flowbridge bridge --provider claude --return-fix</p>
+              <p class="dim">Capturing stack trace and open file context...</p>
+              <p class="success">Connected: ChatGPT - Claude - Gemini</p>
+              <p class="dim">Claude is preparing the correction...</p>
+              <p class="output">Fix returned to terminal: ./flowbridge/fix.md</p>
+            </div>
+          </div>
+
+          <div class="sync-pill pill-one">Local terminal connected</div>
+          <div class="sync-pill pill-two">Claude debugging</div>
+          <div class="sync-pill pill-three">Fix returned</div>
+        </div>
       </section>
 
-      <section class="option-grid wrap" aria-label="Landing page options">
-        <article class="option-card">
-          <div class="option-preview">
-            <div class="mini-window">
-              <div class="mini-bar"></div>
-              <div class="mini-line"></div>
-              <div class="mini-line short"></div>
-              <div class="mini-row">
-                <div class="mini-card"></div>
-                <div class="mini-card"></div>
-              </div>
-            </div>
-          </div>
-          <div class="option-body">
-            <p class="eyebrow">Option 1</p>
-            <h2>Apple Clean</h2>
-            <p>Premium, calm, and very minimal. Best if you want the product to feel polished and trustworthy.</p>
-            <a class="btn-secondary" href="./apple-clean.html">View page</a>
-          </div>
-        </article>
+      <section class="logo-strip" aria-label="Supported assistants">
+        <span>Works with</span>
+        <strong>ChatGPT</strong>
+        <strong>Claude</strong>
+        <strong>Gemini</strong>
+        <strong>Local Terminal</strong>
+      </section>
 
-        <article class="option-card">
-          <div class="option-preview">
-            <div class="mini-window" style="background:#111827">
-              <div class="mini-bar" style="background:#fff"></div>
-              <div class="mini-line" style="background:#60a5fa"></div>
-              <div class="mini-line short" style="background:#6ee7b7"></div>
-              <div class="mini-row">
-                <div class="mini-card" style="background:#fff"></div>
-                <div class="mini-card" style="background:#fff"></div>
-              </div>
-            </div>
-          </div>
-          <div class="option-body">
-            <p class="eyebrow">Option 2</p>
-            <h2>Stripe SaaS</h2>
-            <p>Modern startup style with stronger visual energy. Best for ads, Product Hunt, and fast signups.</p>
-            <a class="btn-primary" href="./stripe-saas.html">View page</a>
-          </div>
-        </article>
+      <section class="section workflow" id="workflow">
+        <div class="section-heading">
+          <p class="eyebrow">Simple workflow</p>
+          <h2>One bridge. Three assistants. Zero tab switching.</h2>
+        </div>
+        <div class="workflow-grid">
+          <article>
+            <span>01</span>
+            <h3>Capture the context</h3>
+            <p>FlowBridge reads the terminal error, selected files, and command history you choose to send.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Route to AI</h3>
+            <p>Send the issue directly to ChatGPT, Claude, or Gemini without jumping between windows.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Bring back the fix</h3>
+            <p>Review the suggested explanation, command, or patch from your local terminal.</p>
+          </article>
+        </div>
+      </section>
 
-        <article class="option-card">
-          <div class="option-preview">
-            <div class="mini-window">
-              <div class="mini-row" style="margin-top:0">
-                <div class="mini-card" style="height:98px"></div>
-                <div class="mini-card" style="height:98px;background:#dbeafe"></div>
+      <section class="section pricing" id="pricing">
+        <div class="pricing-head">
+          <div class="section-heading">
+            <p class="eyebrow">Pricing</p>
+            <h2>Pick your bridge. Start free.</h2>
+            <p class="pricing-lede">Switch billing, compare devices, and see the best plan for your local AI workflow.</p>
+          </div>
+          <div class="billing-toggle" aria-label="Billing period">
+            <button class="billing-option active" type="button" data-billing="monthly">Monthly</button>
+            <button class="billing-option" type="button" data-billing="yearly">Yearly <span>Save up to 31%</span></button>
+          </div>
+        </div>
+
+        <div class="pricing-layout">
+          <div class="pricing-grid">
+            <article class="plan selected" data-plan="starter">
+              <div class="plan-top">
+                <div>
+                  <h3>Starter</h3>
+                  <p>For your main development machine.</p>
+                </div>
+                <span>Solo</span>
               </div>
+              <div class="price-line">
+                <strong data-monthly="$9" data-yearly="$79">$9</strong>
+                <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
+              </div>
+              <p class="price-note" data-monthly="Start small. Keep every AI assistant connected." data-yearly="Save $29 and keep your main machine bridged all year.">Start small. Keep every AI assistant connected.</p>
+              <div class="device-meter" aria-label="One active device">
+                <span class="device active"></span>
+                <span class="device"></span>
+              </div>
+              <ul>
+                <li>1 active device</li>
+                <li>Claude, ChatGPT, and Gemini</li>
+                <li>Send terminal errors to AI</li>
+                <li>Return fixes back to terminal</li>
+              </ul>
+              <button class="secondary-btn plan-select" type="button" data-plan="starter">Start free with Starter</button>
+            </article>
+
+            <article class="plan featured" data-plan="pro">
+              <div class="plan-ribbon">Most developers pick this</div>
+              <div class="plan-top">
+                <div>
+                  <h3>Pro Duo</h3>
+                  <p>For work across two active devices.</p>
+                </div>
+                <span>Best value</span>
+              </div>
+              <div class="price-line">
+                <strong data-monthly="$12" data-yearly="$99">$12</strong>
+                <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
+              </div>
+              <p class="price-note" data-monthly="Two devices, faster support, and less context switching." data-yearly="Save $45 yearly and bridge both machines without friction.">Two devices, faster support, and less context switching.</p>
+              <div class="device-meter" aria-label="Two active devices">
+                <span class="device active"></span>
+                <span class="device active"></span>
+              </div>
+              <ul>
+                <li>2 active devices</li>
+                <li>Claude, ChatGPT, and Gemini</li>
+                <li>Two-way terminal bridge</li>
+                <li>Priority support</li>
+              </ul>
+              <button class="primary-btn plan-select" type="button" data-plan="pro">Start free with Pro Duo</button>
+            </article>
+          </div>
+
+          <div class="pricing-cta" aria-live="polite">
+            <div>
+              <span id="previewPlan">Starter selected</span>
+              <strong><span id="previewPrice">$9</span><small id="previewPeriod">/ mo</small></strong>
+              <p id="previewCopy">Bridge one local machine to Claude, ChatGPT, and Gemini with a 7-day free trial.</p>
             </div>
+            <div class="cta-flow" aria-label="Two-way bridge">
+              <span>Terminal</span>
+              <i></i>
+              <span>Claude</span>
+              <i></i>
+              <span>Fix back</span>
+            </div>
+            <a class="primary-btn" href="#">Start 7-day free trial</a>
           </div>
-          <div class="option-body">
-            <p class="eyebrow">Option 3</p>
-            <h2>Pricing First</h2>
-            <p>Direct and sales-focused. Best if your offer is already clear and you want visitors to start the trial quickly.</p>
-            <a class="btn-secondary" href="./pricing-first.html">View page</a>
-          </div>
-        </article>
+        </div>
+      </section>
+
+      <section class="section faq" id="faq">
+        <div class="section-heading">
+          <p class="eyebrow">FAQ</p>
+          <h2>Answer the questions before checkout.</h2>
+        </div>
+        <div class="faq-grid">
+          <article>
+            <h3>Is this for developers only?</h3>
+            <p>FlowBridge is built primarily for developers working in a local terminal, IDE, or command-line workflow.</p>
+          </article>
+          <article>
+            <h3>Do both plans include all AI tools?</h3>
+            <p>Yes. The difference is the number of active devices and support priority.</p>
+          </article>
+          <article>
+            <h3>Why a command palette?</h3>
+            <p>It makes the bridge visible immediately: choose an AI assistant, send local context, and get the answer back.</p>
+          </article>
+        </div>
       </section>
     </main>
+    <script src="./command-palette.js"></script>
   </body>
 </html>
