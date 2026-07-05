@@ -145,7 +145,7 @@
           <h2>Bring FlowBridge to developers who hate copy and paste.</h2>
           <p>Use short videos, debugging demos, newsletters, and developer communities to show the before-and-after.</p>
         </div>
-        <a class="primary-btn" href="#">Create affiliate account</a>
+        <button class="primary-btn" type="button" id="openJoin">Create affiliate account</button>
       </section>
     </main>
 
@@ -157,16 +157,38 @@
         <p class="modal-copy">Available after 10 new paid referrals and at least $50 in eligible earnings.</p>
         <label>
           PayPal email
-          <input type="email" placeholder="you@example.com" />
+          <input id="payoutPaypal" type="email" placeholder="you@example.com" required />
         </label>
         <label>
-          Affiliate ID
-          <input type="text" placeholder="FB-AFF-1024" />
+          Referral code
+          <input id="payoutCode" type="text" placeholder="FB-YOURCODE-12345" required />
         </label>
-        <button class="primary-btn" value="submit">Submit request</button>
+        <button class="primary-btn" id="submitPayout" value="submit">Submit request</button>
       </form>
     </dialog>
 
+    <dialog class="payout-modal" id="joinModal">
+      <form method="dialog">
+        <button class="modal-close" value="close" aria-label="Close affiliate signup">x</button>
+        <p class="eyebrow">Affiliate signup</p>
+        <h2>Create your affiliate account</h2>
+        <p class="modal-copy">Join FlowBridge affiliates and get a unique referral code.</p>
+        <label>
+          Name
+          <input id="affiliateName" type="text" placeholder="Your name" required />
+        </label>
+        <label>
+          Email
+          <input id="affiliateEmail" type="email" placeholder="you@example.com" required />
+        </label>
+        <button class="primary-btn" id="submitAffiliate" value="submit">Create account</button>
+        <p class="modal-copy" id="affiliateResult"></p>
+      </form>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
     <script src="./affiliate.js"></script>
   </body>
 </html>

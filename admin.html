@@ -46,22 +46,22 @@
           <div class="metric-grid">
             <article>
               <span>Registered users</span>
-              <strong>2,418</strong>
+              <strong id="registeredUsers">0</strong>
               <p>Total accounts created across landing and affiliate traffic.</p>
             </article>
             <article>
               <span>Paid subscribers</span>
-              <strong>684</strong>
+              <strong id="paidSubscribers">0</strong>
               <p>Active users currently paying for FlowBridge.</p>
             </article>
             <article>
               <span>Monthly revenue</span>
-              <strong>$7,936</strong>
+              <strong id="monthlyRevenue">$0</strong>
               <p>Estimated MRR from Starter and Pro Duo plans.</p>
             </article>
             <article>
               <span>Affiliate revenue</span>
-              <strong>$2,145</strong>
+              <strong id="affiliateRevenue">$0</strong>
               <p>Revenue generated from affiliate referrals this month.</p>
             </article>
           </div>
@@ -220,7 +220,7 @@
               <h2>Affiliate payout requests</h2>
               <span>Review</span>
             </div>
-            <div class="table">
+            <div class="table" id="payoutTable">
               <div class="table-row table-head"><span>Affiliate</span><span>Referrals</span><span>Amount</span><span>Status</span><span>Action</span></div>
               <div class="table-row"><span>devlaunch</span><span>12</span><span>$85</span><span class="status pending">Pending</span><button>Approve</button></div>
               <div class="table-row"><span>codetips</span><span>21</span><span>$155</span><span class="status pending">Pending</span><button>Approve</button></div>
@@ -259,6 +259,9 @@
     </main>
 
     <div class="toast" id="toast">Changes saved locally</div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
     <script src="./admin.js"></script>
   </body>
 </html>
