@@ -238,6 +238,15 @@ input[type="range"] {
   margin: 14px 0 24px;
 }
 
+input[type="range"]::-webkit-slider-thumb {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 8px rgba(21, 93, 252, 0.12);
+}
+
 .earnings-total {
   padding: 22px;
   border: 1px solid var(--line);

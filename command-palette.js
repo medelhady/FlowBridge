@@ -1,4 +1,4 @@
-const billingButtons = document.querySelectorAll(".billing-option");
+﻿const billingButtons = document.querySelectorAll(".billing-option");
 const plans = document.querySelectorAll(".plan");
 const selectButtons = document.querySelectorAll(".plan-select");
 const previewPlan = document.querySelector("#previewPlan");
@@ -7,27 +7,37 @@ const previewPeriod = document.querySelector("#previewPeriod");
 const previewCopy = document.querySelector("#previewCopy");
 
 let billing = "monthly";
-let selectedPlan = "starter";
+let selectedPlan = "pro";
 
 const planDetails = {
   starter: {
     name: "Starter",
     devices: "1",
-    monthly: { price: "$9", period: "/ mo" },
-    yearly: { price: "$79", period: "/ yr" },
+    monthly: { price: "$6", period: "/ mo" },
+    yearly: { price: "$60", period: "/ yr" },
     copy: {
-      monthly: "Bridge one local machine to Claude, ChatGPT, and Gemini with a 7-day free trial.",
-      yearly: "One clean yearly payment for your main development machine, with $29 saved.",
+      monthly: "Start small on one machine with every AI assistant connected.",
+      yearly: "Two months free for your first FlowBridge machine.",
     },
   },
   pro: {
-    name: "Pro Duo",
+    name: "Pro",
+    devices: "1",
+    monthly: { price: "$9", period: "/ mo" },
+    yearly: { price: "$90", period: "/ yr" },
+    copy: {
+      monthly: "Use FlowBridge daily with security controls, command history, and a 7-day free trial.",
+      yearly: "Two months free for power users on one device.",
+    },
+  },
+  duo: {
+    name: "Duo",
     devices: "2",
-    monthly: { price: "$12", period: "/ mo" },
-    yearly: { price: "$99", period: "/ yr" },
+    monthly: { price: "$15", period: "/ mo" },
+    yearly: { price: "$150", period: "/ yr" },
     copy: {
       monthly: "Use FlowBridge across two active devices with priority support.",
-      yearly: "Best value for working across two machines, with $45 saved.",
+      yearly: "Two months free for a two-device workflow.",
     },
   },
 };

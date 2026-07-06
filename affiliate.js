@@ -11,6 +11,7 @@ const submitAffiliate = document.querySelector("#submitAffiliate");
 const affiliateResult = document.querySelector("#affiliateResult");
 const submitPayout = document.querySelector("#submitPayout");
 const db = window.flowbridgeDb;
+let previewPausedUntil = 0;
 
 function calculatePayout(referrals) {
   let total = referrals * 5;
@@ -131,4 +132,26 @@ submitPayout.addEventListener("click", async (event) => {
 });
 
 referralRange.addEventListener("input", updatePreview);
+referralRange.addEventListener("pointerdown", () => {
+  previewPausedUntil = Date.now() + 5000;
+});
+referralRange.addEventListener("keydown", () => {
+  previewPausedUntil = Date.now() + 5000;
+});
+
+setInterval(() => {
+  if (Date.now() < previewPausedUntil) return;
+
+  const min = Number(referralRange.min);
+  const max = Number(referralRange.max);
+  let nextValue = Number(referralRange.value) + 1;
+
+  if (nextValue >= max) {
+    nextValue = min;
+  }
+
+  referralRange.value = String(nextValue);
+  updatePreview();
+}, 380);
+
 updatePreview();

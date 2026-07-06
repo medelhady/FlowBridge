@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/affiliate",
+      "destination": "/affiliate.html"
+    },
+    {
+      "source": "/affiliate-dashboard",
+      "destination": "/affiliate-dashboard.html"
+    }
+  ]
+}
