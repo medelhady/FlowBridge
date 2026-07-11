@@ -262,6 +262,13 @@
   line-height: 1.45;
 }
 
+.section-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 #gateBadge {
   min-height: 30px;
   display: inline-flex;
@@ -337,6 +344,12 @@
 }
 
 #addAdminMessage {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+#waitlistMessage {
   margin: 0;
   color: var(--muted);
   font-weight: 850;
@@ -564,7 +577,7 @@
   }
 
   .admin-sidebar nav {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 }
 

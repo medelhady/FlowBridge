@@ -42,6 +42,7 @@
           <button class="admin-tab active" type="button" data-tab="gate">Beta Gate</button>
           <button class="admin-tab" type="button" data-tab="offer">Launch Offer</button>
           <button class="admin-tab" type="button" data-tab="pricing">Pricing</button>
+          <button class="admin-tab" type="button" data-tab="waitlist">Waitlist</button>
           <button class="admin-tab" type="button" data-tab="analytics">Analytics</button>
           <button class="admin-tab" type="button" data-tab="admins">Admin Access</button>
           <button class="admin-tab" type="button" data-tab="advanced">Advanced</button>
@@ -190,7 +191,7 @@
                   <strong id="analyticsCountries">0</strong>
                 </article>
                 <article>
-                  <span>Beta visits</span>
+                  <span>Waitlist visits</span>
                   <strong id="analyticsBeta">0</strong>
                 </article>
               </div>
@@ -209,6 +210,48 @@
                   </tbody>
                 </table>
               </div>
+            </section>
+
+            <section class="admin-section" data-panel="waitlist">
+              <div class="section-title">
+                <div>
+                  <h2>Beta Waitlist</h2>
+                  <p>People who asked to receive the private beta download link.</p>
+                </div>
+                <div class="section-actions">
+                  <button class="secondary-btn" type="button" id="copyWaitlistEmails">Copy emails</button>
+                  <button class="secondary-btn" type="button" id="refreshWaitlist">Refresh</button>
+                </div>
+              </div>
+              <div class="analytics-grid">
+                <article>
+                  <span>Total emails</span>
+                  <strong id="waitlistTotal">0</strong>
+                </article>
+                <article>
+                  <span>Today</span>
+                  <strong id="waitlistToday">0</strong>
+                </article>
+                <article>
+                  <span>Latest signup</span>
+                  <strong id="waitlistLatest">-</strong>
+                </article>
+              </div>
+              <div class="analytics-table-wrap">
+                <table class="analytics-table">
+                  <thead>
+                    <tr>
+                      <th>Email</th>
+                      <th>Source</th>
+                      <th>Joined</th>
+                    </tr>
+                  </thead>
+                  <tbody id="waitlistRows">
+                    <tr><td colspan="3">No waitlist emails loaded yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p id="waitlistMessage" role="status"></p>
             </section>
 
             <section class="admin-section" data-panel="admins">

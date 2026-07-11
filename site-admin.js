@@ -17,6 +17,13 @@ const analyticsTotal = document.querySelector("#analyticsTotal");
 const analyticsCountries = document.querySelector("#analyticsCountries");
 const analyticsBeta = document.querySelector("#analyticsBeta");
 const analyticsRows = document.querySelector("#analyticsRows");
+const refreshWaitlist = document.querySelector("#refreshWaitlist");
+const copyWaitlistEmails = document.querySelector("#copyWaitlistEmails");
+const waitlistTotal = document.querySelector("#waitlistTotal");
+const waitlistToday = document.querySelector("#waitlistToday");
+const waitlistLatest = document.querySelector("#waitlistLatest");
+const waitlistRows = document.querySelector("#waitlistRows");
+const waitlistMessage = document.querySelector("#waitlistMessage");
 const tabs = document.querySelectorAll(".admin-tab");
 const panels = document.querySelectorAll(".admin-section");
 
@@ -36,6 +43,7 @@ const previewDuo = document.querySelector("#previewDuo");
 const ADMIN_SESSION_KEY = "flowbridge_admin_signed_in";
 const ADMIN_EMAIL_KEY = "flowbridge_admin_email";
 const ADMIN_PASSWORD_KEY = "flowbridge_admin_password";
+let waitlistCache = [];
 
 function setAdminVisible(isSignedIn) {
   adminLogin.hidden = isSignedIn;
@@ -111,6 +119,7 @@ function showTab(tabId) {
     panel.classList.toggle("active", panel.dataset.panel === tabId);
   });
   if (tabId === "analytics") loadAnalytics();
+  if (tabId === "waitlist") loadWaitlist();
 }
 
 function formatDate(value) {
@@ -167,6 +176,48 @@ async function loadAnalytics() {
       </tr>
     `;
   }).join("");
+}
+
+function isToday(value) {
+  if (!value) return false;
+  const date = new Date(value);
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+}
+
+async function loadWaitlist() {
+  if (!window.flowbridgeDb || !waitlistRows) return;
+
+  waitlistRows.innerHTML = '<tr><td colspan="3">Loading waitlist...</td></tr>';
+
+  const { data, error } = await window.flowbridgeDb
+    .from("beta_waitlist")
+    .select("email,source,created_at")
+    .order("created_at", { ascending: false })
+    .limit(200);
+
+  if (error) {
+    waitlistRows.innerHTML = `<tr><td colspan="3">Could not load waitlist: ${error.message}</td></tr>`;
+    return;
+  }
+
+  waitlistCache = data || [];
+  waitlistTotal.textContent = String(waitlistCache.length);
+  waitlistToday.textContent = String(waitlistCache.filter((row) => isToday(row.created_at)).length);
+  waitlistLatest.textContent = waitlistCache[0]?.created_at ? new Date(waitlistCache[0].created_at).toLocaleDateString() : "-";
+
+  if (!waitlistCache.length) {
+    waitlistRows.innerHTML = '<tr><td colspan="3">No waitlist emails yet.</td></tr>';
+    return;
+  }
+
+  waitlistRows.innerHTML = waitlistCache.map((row) => `
+    <tr>
+      <td>${row.email}</td>
+      <td>${row.source || "beta_page"}</td>
+      <td>${formatDate(row.created_at)}</td>
+    </tr>
+  `).join("");
 }
 
 adminLoginForm.addEventListener("submit", async (event) => {
@@ -248,6 +299,17 @@ tabs.forEach((tab) => {
 });
 
 refreshAnalytics?.addEventListener("click", loadAnalytics);
+refreshWaitlist?.addEventListener("click", loadWaitlist);
+copyWaitlistEmails?.addEventListener("click", async () => {
+  const emails = waitlistCache.map((row) => row.email).filter(Boolean).join(", ");
+  if (!emails) {
+    waitlistMessage.textContent = "No emails to copy yet.";
+    return;
+  }
+
+  await navigator.clipboard.writeText(emails);
+  waitlistMessage.textContent = "Waitlist emails copied.";
+});
 
 form.addEventListener("input", renderPreview);
 
