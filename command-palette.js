@@ -62,6 +62,11 @@ function updatePlanDetails(nextSettings) {
 function applySiteSettings(nextSettings) {
   updatePlanDetails(nextSettings);
 
+  if (settings.betaGateEnabled && !sessionStorage.getItem("flowbridge_view_full_site")) {
+    window.location.href = "./beta.html";
+    return;
+  }
+
   if (launchLabel) launchLabel.textContent = settings.launchLabel;
   if (launchTitle) launchTitle.textContent = settings.launchTitle;
   if (launchCopy) launchCopy.textContent = settings.launchCopy;

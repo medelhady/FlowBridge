@@ -13,6 +13,10 @@
     {
       "source": "/site-admin",
       "destination": "/site-admin.html"
+    },
+    {
+      "source": "/beta",
+      "destination": "/beta.html"
     }
   ]
 }

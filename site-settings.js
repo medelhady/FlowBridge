@@ -1,4 +1,5 @@
 window.FLOWBRIDGE_SITE_DEFAULTS = {
+  betaGateEnabled: false,
   launchLabel: "Limited beta launch",
   launchTitle: "First 100 users get FlowBridge for $39/year.",
   launchCopy: "Windows beta is open now with a 14-day trial. After the first 100 seats, yearly pricing returns to the regular plan.",

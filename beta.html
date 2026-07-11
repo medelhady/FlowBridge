@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlowBridge Beta Access</title>
+    <meta
+      name="description"
+      content="Join the FlowBridge beta waitlist and get the Windows beta link by email."
+    />
+    <link rel="stylesheet" href="./beta.css" />
+  </head>
+  <body>
+    <main class="beta-page">
+      <header class="beta-nav">
+        <a class="brand" href="./index.html" aria-label="FlowBridge home">
+          <span class="brand-mark">F</span>
+          <span>FlowBridge</span>
+        </a>
+        <div class="beta-nav-actions">
+          <button class="ghost-link" type="button" id="viewFullSite">View product details</button>
+          <span class="status-pill">Private Windows beta</span>
+        </div>
+      </header>
+
+      <section class="beta-frame" aria-labelledby="betaTitle">
+        <div class="terminal-top">
+          <span></span>
+          <span></span>
+          <span></span>
+          <strong>flowbridge beta --invite</strong>
+        </div>
+
+        <div class="beta-grid">
+          <div class="story-panel">
+            <p class="eyebrow">The story behind FlowBridge</p>
+            <h1 id="betaTitle">Help test the bridge between AI chat and your terminal.</h1>
+            <pre class="story-code" aria-label="FlowBridge founder story"><code id="storyType"></code><i class="type-cursor"></i></pre>
+          </div>
+
+          <form class="waitlist-card" id="betaForm">
+            <span class="card-label">Beta access</span>
+            <h2>Get the private download link by email.</h2>
+            <p>
+              We are looking for real testers who can try FlowBridge honestly and tell us what feels useful, confusing, or missing before the public launch.
+            </p>
+
+            <label>
+              Email
+              <input id="betaEmail" type="email" placeholder="you@example.com" required />
+            </label>
+
+            <button type="submit" id="betaSubmit">Send me the beta link</button>
+            <small id="betaMessage">No spam. We only use this to send beta access and ask for feedback.</small>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
+    <script src="./beta.js"></script>
+  </body>
+</html>

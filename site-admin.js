@@ -6,12 +6,18 @@ const resetButton = document.querySelector("#resetButton");
 function fillForm(settings) {
   Object.entries(settings).forEach(([key, value]) => {
     const field = form.elements[key];
-    if (field) field.value = value;
+    if (!field) return;
+    if (field.type === "checkbox") {
+      field.checked = Boolean(value);
+      return;
+    }
+    field.value = value;
   });
 }
 
 function readForm() {
   const data = Object.fromEntries(new FormData(form).entries());
+  data.betaGateEnabled = Boolean(form.elements.betaGateEnabled?.checked);
   data.launchClaimed = Number(data.launchClaimed || 0);
   data.launchTotal = Number(data.launchTotal || 100);
   return data;
