@@ -42,6 +42,7 @@
           <button class="admin-tab active" type="button" data-tab="gate">Beta Gate</button>
           <button class="admin-tab" type="button" data-tab="offer">Launch Offer</button>
           <button class="admin-tab" type="button" data-tab="pricing">Pricing</button>
+          <button class="admin-tab" type="button" data-tab="analytics">Analytics</button>
           <button class="admin-tab" type="button" data-tab="admins">Admin Access</button>
           <button class="admin-tab" type="button" data-tab="advanced">Advanced</button>
         </nav>
@@ -169,6 +170,45 @@
                 Lifetime copy
                 <textarea name="lifetimeCopy" rows="3"></textarea>
               </label>
+            </section>
+
+            <section class="admin-section" data-panel="analytics">
+              <div class="section-title">
+                <div>
+                  <h2>Visitor Analytics</h2>
+                  <p>See recent visitors, locations, pages, and referrers.</p>
+                </div>
+                <button class="secondary-btn" type="button" id="refreshAnalytics">Refresh</button>
+              </div>
+              <div class="analytics-grid">
+                <article>
+                  <span>Total visits</span>
+                  <strong id="analyticsTotal">0</strong>
+                </article>
+                <article>
+                  <span>Countries</span>
+                  <strong id="analyticsCountries">0</strong>
+                </article>
+                <article>
+                  <span>Beta visits</span>
+                  <strong id="analyticsBeta">0</strong>
+                </article>
+              </div>
+              <div class="analytics-table-wrap">
+                <table class="analytics-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Page</th>
+                      <th>Location</th>
+                      <th>Referrer</th>
+                    </tr>
+                  </thead>
+                  <tbody id="analyticsRows">
+                    <tr><td colspan="4">No visits loaded yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </section>
 
             <section class="admin-section" data-panel="admins">

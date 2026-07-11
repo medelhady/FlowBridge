@@ -12,6 +12,11 @@ const newAdminEmail = document.querySelector("#newAdminEmail");
 const newAdminPassword = document.querySelector("#newAdminPassword");
 const addAdminButton = document.querySelector("#addAdminButton");
 const addAdminMessage = document.querySelector("#addAdminMessage");
+const refreshAnalytics = document.querySelector("#refreshAnalytics");
+const analyticsTotal = document.querySelector("#analyticsTotal");
+const analyticsCountries = document.querySelector("#analyticsCountries");
+const analyticsBeta = document.querySelector("#analyticsBeta");
+const analyticsRows = document.querySelector("#analyticsRows");
 const tabs = document.querySelectorAll(".admin-tab");
 const panels = document.querySelectorAll(".admin-section");
 
@@ -105,6 +110,63 @@ function showTab(tabId) {
   panels.forEach((panel) => {
     panel.classList.toggle("active", panel.dataset.panel === tabId);
   });
+  if (tabId === "analytics") loadAnalytics();
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  return new Date(value).toLocaleString();
+}
+
+function shortReferrer(value) {
+  if (!value) return "Direct";
+  try {
+    return new URL(value).hostname;
+  } catch (error) {
+    return value;
+  }
+}
+
+async function loadAnalytics() {
+  if (!window.flowbridgeDb || !analyticsRows) return;
+
+  analyticsRows.innerHTML = '<tr><td colspan="4">Loading visits...</td></tr>';
+
+  const { data, error } = await window.flowbridgeDb
+    .from("visitor_events")
+    .select("created_at,page,country,city,region,referrer")
+    .order("created_at", { ascending: false })
+    .limit(80);
+
+  if (error) {
+    analyticsRows.innerHTML = `<tr><td colspan="4">Could not load analytics: ${error.message}</td></tr>`;
+    return;
+  }
+
+  const rows = data || [];
+  const countries = new Set(rows.map((row) => row.country).filter(Boolean));
+  const betaVisits = rows.filter((row) => row.page === "/beta" || row.page.endsWith("/beta")).length;
+
+  analyticsTotal.textContent = String(rows.length);
+  analyticsCountries.textContent = String(countries.size);
+  analyticsBeta.textContent = String(betaVisits);
+
+  if (!rows.length) {
+    analyticsRows.innerHTML = '<tr><td colspan="4">No visits yet.</td></tr>';
+    return;
+  }
+
+  analyticsRows.innerHTML = rows.map((row) => {
+    const location = [row.city, row.region, row.country].filter(Boolean).join(", ") || "Unknown";
+    return `
+      <tr>
+        <td>${formatDate(row.created_at)}</td>
+        <td>${row.page || "/"}</td>
+        <td>${location}</td>
+        <td>${shortReferrer(row.referrer)}</td>
+      </tr>
+    `;
+  }).join("");
 }
 
 adminLoginForm.addEventListener("submit", async (event) => {
@@ -184,6 +246,8 @@ addAdminButton.addEventListener("click", async () => {
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => showTab(tab.dataset.tab));
 });
+
+refreshAnalytics?.addEventListener("click", loadAnalytics);
 
 form.addEventListener("input", renderPreview);
 
