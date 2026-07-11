@@ -2,6 +2,21 @@ const form = document.querySelector("#siteSettingsForm");
 const message = document.querySelector("#adminMessage");
 const previewButton = document.querySelector("#previewButton");
 const resetButton = document.querySelector("#resetButton");
+const tabs = document.querySelectorAll(".admin-tab");
+const panels = document.querySelectorAll(".admin-section");
+
+const statusGate = document.querySelector("#statusGate");
+const statusSeats = document.querySelector("#statusSeats");
+const statusSolo = document.querySelector("#statusSolo");
+const statusDuo = document.querySelector("#statusDuo");
+const gateBadge = document.querySelector("#gateBadge");
+const previewLaunchLabel = document.querySelector("#previewLaunchLabel");
+const previewLaunchTitle = document.querySelector("#previewLaunchTitle");
+const previewLaunchCopy = document.querySelector("#previewLaunchCopy");
+const previewSeats = document.querySelector("#previewSeats");
+const previewBar = document.querySelector("#previewBar");
+const previewSolo = document.querySelector("#previewSolo");
+const previewDuo = document.querySelector("#previewDuo");
 
 function fillForm(settings) {
   Object.entries(settings).forEach(([key, value]) => {
@@ -13,6 +28,7 @@ function fillForm(settings) {
     }
     field.value = value;
   });
+  renderPreview();
 }
 
 function readForm() {
@@ -26,6 +42,53 @@ function readForm() {
 function setMessage(text) {
   message.textContent = text;
 }
+
+function formatPrice(price, period) {
+  return `${price || "$0"}${period}`;
+}
+
+function renderPreview() {
+  const settings = {
+    ...window.FLOWBRIDGE_SITE_DEFAULTS,
+    ...readForm(),
+  };
+
+  const claimed = Number(settings.launchClaimed || 0);
+  const total = Number(settings.launchTotal || 100);
+  const percent = Math.min(100, Math.round((claimed / total) * 100));
+
+  statusGate.textContent = settings.betaGateEnabled ? "On" : "Off";
+  statusGate.style.color = settings.betaGateEnabled ? "#047857" : "";
+  statusSeats.textContent = `${claimed} / ${total}`;
+  statusSolo.textContent = formatPrice(settings.soloMonthly, "/mo");
+  statusDuo.textContent = formatPrice(settings.duoMonthly, "/mo");
+
+  gateBadge.textContent = settings.betaGateEnabled ? "On" : "Off";
+  gateBadge.classList.toggle("on", settings.betaGateEnabled);
+
+  previewLaunchLabel.textContent = settings.launchLabel;
+  previewLaunchTitle.textContent = settings.launchTitle;
+  previewLaunchCopy.textContent = settings.launchCopy;
+  previewSeats.textContent = `${claimed} / ${total} claimed`;
+  previewBar.style.width = `${percent}%`;
+  previewSolo.innerHTML = `${settings.soloMonthly || "$9"} <small>/ mo</small>`;
+  previewDuo.innerHTML = `${settings.duoMonthly || "$15"} <small>/ mo</small>`;
+}
+
+function showTab(tabId) {
+  tabs.forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.tab === tabId);
+  });
+  panels.forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.panel === tabId);
+  });
+}
+
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => showTab(tab.dataset.tab));
+});
+
+form.addEventListener("input", renderPreview);
 
 window.addEventListener("flowbridge:settings-ready", (event) => {
   fillForm(event.detail);

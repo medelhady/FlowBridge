@@ -8,106 +8,194 @@
     <link rel="stylesheet" href="./site-admin.css" />
   </head>
   <body>
-    <main class="admin-shell">
-      <header class="admin-hero">
-        <div>
-          <p class="eyebrow">Site dashboard</p>
-          <h1>Control FlowBridge landing content.</h1>
-          <p>Change pricing, launch offer, download link, and lifetime copy without touching the page code.</p>
-        </div>
-        <a class="secondary-btn" href="./index.html">Open site</a>
-      </header>
+    <main class="admin-app">
+      <aside class="admin-sidebar" aria-label="Site dashboard navigation">
+        <a class="admin-brand" href="./index.html">
+          <span>F</span>
+          <strong>FlowBridge</strong>
+        </a>
+        <nav>
+          <button class="admin-tab active" type="button" data-tab="gate">Beta Gate</button>
+          <button class="admin-tab" type="button" data-tab="offer">Launch Offer</button>
+          <button class="admin-tab" type="button" data-tab="pricing">Pricing</button>
+          <button class="admin-tab" type="button" data-tab="advanced">Advanced</button>
+        </nav>
+        <a class="sidebar-link" href="./index.html">Open site</a>
+        <a class="sidebar-link" href="./beta.html">Open beta page</a>
+      </aside>
 
-      <form class="admin-panel" id="siteSettingsForm">
-        <section>
-          <h2>Beta Gate</h2>
-          <label class="toggle-row">
-            <input name="betaGateEnabled" type="checkbox" />
-            Show beta waitlist as the homepage
-          </label>
-          <p class="admin-help">When this is on, visitors who open the main site will see the beta email page. Turn it off to show the full landing page again.</p>
-        </section>
-
-        <section>
-          <h2>Launch Offer</h2>
-          <label>
-            Label
-            <input name="launchLabel" />
-          </label>
-          <label>
-            Title
-            <input name="launchTitle" />
-          </label>
-          <label>
-            Description
-            <textarea name="launchCopy" rows="3"></textarea>
-          </label>
-          <div class="admin-grid">
-            <label>
-              Claimed seats
-              <input name="launchClaimed" type="number" min="0" />
-            </label>
-            <label>
-              Total seats
-              <input name="launchTotal" type="number" min="1" />
-            </label>
+      <section class="admin-main">
+        <header class="admin-top">
+          <div>
+            <p class="eyebrow">Site dashboard</p>
+            <h1>Control your launch page.</h1>
+            <p>Switch the beta gate, edit the offer, adjust pricing, and preview the public page before saving.</p>
           </div>
-          <label>
-            Download URL
-            <input name="downloadUrl" />
-          </label>
-        </section>
-
-        <section>
-          <h2>Pricing</h2>
-          <div class="admin-grid">
-            <label>
-              Solo monthly
-              <input name="soloMonthly" />
-            </label>
-            <label>
-              Solo yearly
-              <input name="soloYearly" />
-            </label>
-            <label>
-              Duo monthly
-              <input name="duoMonthly" />
-            </label>
-            <label>
-              Duo yearly
-              <input name="duoYearly" />
-            </label>
+          <div class="save-stack">
+            <button class="primary-btn" type="submit" form="siteSettingsForm">Save live</button>
+            <button class="secondary-btn" type="button" id="previewButton">Preview locally</button>
           </div>
-        </section>
+        </header>
 
-        <section>
-          <h2>Lifetime</h2>
-          <label>
-            Lifetime price
-            <input name="lifetimePrice" />
-          </label>
-          <label>
-            Lifetime copy
-            <textarea name="lifetimeCopy" rows="3"></textarea>
-          </label>
-        </section>
-
-        <div class="admin-actions">
-          <button class="primary-btn" type="submit">Save changes</button>
-          <button class="secondary-btn" type="button" id="previewButton">Preview locally</button>
-          <button class="secondary-btn" type="button" id="resetButton">Reset</button>
-          <p id="adminMessage" role="status"></p>
+        <div class="status-grid">
+          <article>
+            <span>Beta Gate</span>
+            <strong id="statusGate">Off</strong>
+          </article>
+          <article>
+            <span>Claimed Seats</span>
+            <strong id="statusSeats">34 / 100</strong>
+          </article>
+          <article>
+            <span>Solo</span>
+            <strong id="statusSolo">$9/mo</strong>
+          </article>
+          <article>
+            <span>Duo</span>
+            <strong id="statusDuo">$15/mo</strong>
+          </article>
         </div>
-      </form>
 
-      <section class="admin-note">
-        <h2>Database setup</h2>
-        <p>For live updates on Vercel, create this table in Supabase once:</p>
-        <pre><code>create table if not exists site_settings (
+        <div class="admin-workspace">
+          <form class="admin-panel" id="siteSettingsForm">
+            <section class="admin-section active" data-panel="gate">
+              <div class="section-title">
+                <div>
+                  <h2>Beta Gate</h2>
+                  <p>Use the beta waitlist as the front door while you collect tester emails.</p>
+                </div>
+                <span id="gateBadge">Off</span>
+              </div>
+              <label class="switch-row">
+                <input name="betaGateEnabled" type="checkbox" />
+                <span>
+                  <strong>Show beta waitlist as homepage</strong>
+                  <small>Turn this off any time to show the full landing page again.</small>
+                </span>
+              </label>
+            </section>
+
+            <section class="admin-section" data-panel="offer">
+              <div class="section-title">
+                <div>
+                  <h2>Launch Offer</h2>
+                  <p>Edit the banner, seat count, progress bar, and beta download link.</p>
+                </div>
+              </div>
+              <label>
+                Label
+                <input name="launchLabel" />
+              </label>
+              <label>
+                Title
+                <input name="launchTitle" />
+              </label>
+              <label>
+                Description
+                <textarea name="launchCopy" rows="3"></textarea>
+              </label>
+              <div class="admin-grid">
+                <label>
+                  Claimed seats
+                  <input name="launchClaimed" type="number" min="0" />
+                </label>
+                <label>
+                  Total seats
+                  <input name="launchTotal" type="number" min="1" />
+                </label>
+              </div>
+              <label>
+                Download URL
+                <input name="downloadUrl" />
+              </label>
+            </section>
+
+            <section class="admin-section" data-panel="pricing">
+              <div class="section-title">
+                <div>
+                  <h2>Pricing</h2>
+                  <p>Keep the public pricing simple: one device or two devices.</p>
+                </div>
+              </div>
+              <div class="admin-grid">
+                <label>
+                  Solo monthly
+                  <input name="soloMonthly" />
+                </label>
+                <label>
+                  Solo yearly
+                  <input name="soloYearly" />
+                </label>
+                <label>
+                  Duo monthly
+                  <input name="duoMonthly" />
+                </label>
+                <label>
+                  Duo yearly
+                  <input name="duoYearly" />
+                </label>
+              </div>
+              <label>
+                Lifetime price
+                <input name="lifetimePrice" />
+              </label>
+              <label>
+                Lifetime copy
+                <textarea name="lifetimeCopy" rows="3"></textarea>
+              </label>
+            </section>
+
+            <section class="admin-section" data-panel="advanced">
+              <div class="section-title">
+                <div>
+                  <h2>Advanced</h2>
+                  <p>Database setup and local reset controls.</p>
+                </div>
+              </div>
+              <div class="admin-note">
+                <h3>Database setup</h3>
+                <p>For live updates on Vercel, create this table in Supabase once:</p>
+                <pre><code>create table if not exists site_settings (
   id text primary key,
   content jsonb not null,
   updated_at timestamptz default now()
 );</code></pre>
+              </div>
+              <button class="secondary-btn" type="button" id="resetButton">Reset local preview</button>
+            </section>
+
+            <p id="adminMessage" role="status"></p>
+          </form>
+
+          <aside class="live-preview" aria-label="Live settings preview">
+            <div class="preview-window">
+              <div class="preview-top"><span></span><span></span><span></span><strong>preview</strong></div>
+              <div class="preview-body">
+                <div class="preview-offer">
+                  <span id="previewLaunchLabel">Limited beta launch</span>
+                  <h3 id="previewLaunchTitle">First 100 users get FlowBridge for $39/year.</h3>
+                  <p id="previewLaunchCopy">Windows beta is open now with a 14-day trial.</p>
+                  <div class="preview-progress">
+                    <strong id="previewSeats">34 / 100 claimed</strong>
+                    <i><b id="previewBar"></b></i>
+                  </div>
+                </div>
+                <div class="preview-terminal">
+                  <article>
+                    <h4>Solo</h4>
+                    <strong id="previewSolo">$9 <small>/ mo</small></strong>
+                    <p>$ flowbridge activate --plan solo</p>
+                  </article>
+                  <article>
+                    <h4>Duo</h4>
+                    <strong id="previewDuo">$15 <small>/ mo</small></strong>
+                    <p>$ flowbridge activate --plan duo</p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </section>
     </main>
 
