@@ -8,6 +8,30 @@
     <link rel="stylesheet" href="./site-admin.css" />
   </head>
   <body>
+    <section class="admin-login" id="adminLogin">
+      <form class="login-card" id="adminLoginForm">
+        <a class="admin-brand" href="./index.html">
+          <span>F</span>
+          <strong>FlowBridge</strong>
+        </a>
+        <div>
+          <p class="eyebrow">Admin access</p>
+          <h1>Sign in to control the launch.</h1>
+          <p>Restricted dashboard for FlowBridge site settings.</p>
+        </div>
+        <label>
+          Admin email
+          <input id="adminEmail" type="email" placeholder="admin@example.com" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input id="adminPassword" type="password" placeholder="Password" autocomplete="current-password" required />
+        </label>
+        <button class="primary-btn" type="submit">Sign in</button>
+        <p id="loginMessage" role="status"></p>
+      </form>
+    </section>
+
     <main class="admin-app">
       <aside class="admin-sidebar" aria-label="Site dashboard navigation">
         <a class="admin-brand" href="./index.html">
@@ -18,10 +42,12 @@
           <button class="admin-tab active" type="button" data-tab="gate">Beta Gate</button>
           <button class="admin-tab" type="button" data-tab="offer">Launch Offer</button>
           <button class="admin-tab" type="button" data-tab="pricing">Pricing</button>
+          <button class="admin-tab" type="button" data-tab="admins">Admin Access</button>
           <button class="admin-tab" type="button" data-tab="advanced">Advanced</button>
         </nav>
         <a class="sidebar-link" href="./index.html">Open site</a>
         <a class="sidebar-link" href="./beta.html">Open beta page</a>
+        <button class="sidebar-link logout-button" type="button" id="logoutButton">Sign out</button>
       </aside>
 
       <section class="admin-main">
@@ -143,6 +169,29 @@
                 Lifetime copy
                 <textarea name="lifetimeCopy" rows="3"></textarea>
               </label>
+            </section>
+
+            <section class="admin-section" data-panel="admins">
+              <div class="section-title">
+                <div>
+                  <h2>Admin Access</h2>
+                  <p>Add another admin without opening Supabase.</p>
+                </div>
+              </div>
+              <div class="admin-note">
+                <h3>Add admin</h3>
+                <p>The new password is stored encrypted in Supabase.</p>
+              </div>
+              <label>
+                New admin email
+                <input id="newAdminEmail" type="email" placeholder="name@example.com" autocomplete="off" />
+              </label>
+              <label>
+                New admin password
+                <input id="newAdminPassword" type="password" placeholder="Password" autocomplete="new-password" />
+              </label>
+              <button class="primary-btn" type="button" id="addAdminButton">Add admin</button>
+              <p id="addAdminMessage" role="status"></p>
             </section>
 
             <section class="admin-section" data-panel="advanced">

@@ -2,6 +2,16 @@ const form = document.querySelector("#siteSettingsForm");
 const message = document.querySelector("#adminMessage");
 const previewButton = document.querySelector("#previewButton");
 const resetButton = document.querySelector("#resetButton");
+const adminLogin = document.querySelector("#adminLogin");
+const adminLoginForm = document.querySelector("#adminLoginForm");
+const loginMessage = document.querySelector("#loginMessage");
+const logoutButton = document.querySelector("#logoutButton");
+const adminEmailInput = document.querySelector("#adminEmail");
+const adminPasswordInput = document.querySelector("#adminPassword");
+const newAdminEmail = document.querySelector("#newAdminEmail");
+const newAdminPassword = document.querySelector("#newAdminPassword");
+const addAdminButton = document.querySelector("#addAdminButton");
+const addAdminMessage = document.querySelector("#addAdminMessage");
 const tabs = document.querySelectorAll(".admin-tab");
 const panels = document.querySelectorAll(".admin-section");
 
@@ -17,6 +27,19 @@ const previewSeats = document.querySelector("#previewSeats");
 const previewBar = document.querySelector("#previewBar");
 const previewSolo = document.querySelector("#previewSolo");
 const previewDuo = document.querySelector("#previewDuo");
+
+const ADMIN_SESSION_KEY = "flowbridge_admin_signed_in";
+const ADMIN_EMAIL_KEY = "flowbridge_admin_email";
+const ADMIN_PASSWORD_KEY = "flowbridge_admin_password";
+
+function setAdminVisible(isSignedIn) {
+  adminLogin.hidden = isSignedIn;
+  document.body.classList.toggle("admin-locked", !isSignedIn);
+}
+
+function checkAdminSession() {
+  setAdminVisible(sessionStorage.getItem(ADMIN_SESSION_KEY) === "1");
+}
 
 function fillForm(settings) {
   Object.entries(settings).forEach(([key, value]) => {
@@ -83,6 +106,80 @@ function showTab(tabId) {
     panel.classList.toggle("active", panel.dataset.panel === tabId);
   });
 }
+
+adminLoginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const email = adminEmailInput.value.trim().toLowerCase();
+  const password = adminPasswordInput.value;
+
+  loginMessage.textContent = "Checking...";
+
+  if (!window.flowbridgeDb) {
+    loginMessage.textContent = "Supabase is not connected.";
+    return;
+  }
+
+  const { data, error } = await window.flowbridgeDb.rpc("admin_login", {
+    admin_email: email,
+    admin_password: password,
+  });
+
+  if (!error && data === true) {
+    sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+    sessionStorage.setItem(ADMIN_EMAIL_KEY, email);
+    sessionStorage.setItem(ADMIN_PASSWORD_KEY, password);
+    loginMessage.textContent = "";
+    adminLoginForm.reset();
+    setAdminVisible(true);
+    return;
+  }
+
+  loginMessage.textContent = "Email or password is incorrect.";
+});
+
+logoutButton.addEventListener("click", () => {
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+  sessionStorage.removeItem(ADMIN_EMAIL_KEY);
+  sessionStorage.removeItem(ADMIN_PASSWORD_KEY);
+  setAdminVisible(false);
+});
+
+checkAdminSession();
+
+addAdminButton.addEventListener("click", async () => {
+  const currentEmail = sessionStorage.getItem(ADMIN_EMAIL_KEY);
+  const currentPassword = sessionStorage.getItem(ADMIN_PASSWORD_KEY);
+  const email = newAdminEmail.value.trim().toLowerCase();
+  const password = newAdminPassword.value;
+
+  if (!email || !password) {
+    addAdminMessage.textContent = "Add email and password first.";
+    return;
+  }
+
+  addAdminButton.disabled = true;
+  addAdminButton.textContent = "Adding...";
+  addAdminMessage.textContent = "Saving admin...";
+
+  const { data, error } = await window.flowbridgeDb.rpc("add_admin_user", {
+    current_email: currentEmail,
+    current_password: currentPassword,
+    new_email: email,
+    new_password: password,
+  });
+
+  addAdminButton.disabled = false;
+  addAdminButton.textContent = "Add admin";
+
+  if (error || data !== true) {
+    addAdminMessage.textContent = error?.message || "Could not add admin.";
+    return;
+  }
+
+  newAdminEmail.value = "";
+  newAdminPassword.value = "";
+  addAdminMessage.textContent = "Admin added successfully.";
+});
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => showTab(tab.dataset.tab));

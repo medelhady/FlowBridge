@@ -1,3 +1,68 @@
+.admin-login {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background:
+    linear-gradient(rgba(16, 24, 39, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 24, 39, 0.045) 1px, transparent 1px),
+    #f7f9fd;
+  background-size: 34px 34px;
+}
+
+.admin-login[hidden] {
+  display: none;
+}
+
+.login-card {
+  width: min(440px, 100%);
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 30px 90px rgba(14, 17, 24, 0.14);
+}
+
+.login-card h1 {
+  margin: 6px 0 8px;
+  font-size: 34px;
+  line-height: 0.98;
+}
+
+.login-card p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.login-card label {
+  display: grid;
+  gap: 7px;
+  color: #293244;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.login-card input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--ink);
+  background: #f8fafc;
+  font: inherit;
+}
+
+#loginMessage {
+  min-height: 20px;
+  color: #b42318;
+  font-weight: 850;
+}
+
 .admin-app {
   min-height: 100vh;
   display: grid;
@@ -82,6 +147,10 @@
 
 .sidebar-link + .sidebar-link {
   margin-top: 0;
+}
+
+.logout-button {
+  width: 100%;
 }
 
 .admin-main {
@@ -267,6 +336,12 @@
   font-weight: 850;
 }
 
+#addAdminMessage {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
+}
+
 .admin-note {
   display: grid;
   gap: 10px;
@@ -431,7 +506,7 @@
   }
 
   .admin-sidebar nav {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
