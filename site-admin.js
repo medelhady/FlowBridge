@@ -19,6 +19,7 @@ const analyticsBeta = document.querySelector("#analyticsBeta");
 const analyticsRows = document.querySelector("#analyticsRows");
 const refreshWaitlist = document.querySelector("#refreshWaitlist");
 const copyWaitlistEmails = document.querySelector("#copyWaitlistEmails");
+const copyPendingEmails = document.querySelector("#copyPendingEmails");
 const waitlistTotal = document.querySelector("#waitlistTotal");
 const waitlistToday = document.querySelector("#waitlistToday");
 const waitlistLatest = document.querySelector("#waitlistLatest");
@@ -188,16 +189,16 @@ function isToday(value) {
 async function loadWaitlist() {
   if (!window.flowbridgeDb || !waitlistRows) return;
 
-  waitlistRows.innerHTML = '<tr><td colspan="3">Loading waitlist...</td></tr>';
+  waitlistRows.innerHTML = '<tr><td colspan="5">Loading waitlist...</td></tr>';
 
   const { data, error } = await window.flowbridgeDb
     .from("beta_waitlist")
-    .select("email,source,created_at")
+    .select("id,email,source,status,sent_at,created_at")
     .order("created_at", { ascending: false })
     .limit(200);
 
   if (error) {
-    waitlistRows.innerHTML = `<tr><td colspan="3">Could not load waitlist: ${error.message}</td></tr>`;
+    waitlistRows.innerHTML = `<tr><td colspan="5">Could not load waitlist: ${error.message}</td></tr>`;
     return;
   }
 
@@ -207,17 +208,36 @@ async function loadWaitlist() {
   waitlistLatest.textContent = waitlistCache[0]?.created_at ? new Date(waitlistCache[0].created_at).toLocaleDateString() : "-";
 
   if (!waitlistCache.length) {
-    waitlistRows.innerHTML = '<tr><td colspan="3">No waitlist emails yet.</td></tr>';
+    waitlistRows.innerHTML = '<tr><td colspan="5">No waitlist emails yet.</td></tr>';
     return;
   }
 
   waitlistRows.innerHTML = waitlistCache.map((row) => `
     <tr>
       <td>${row.email}</td>
+      <td><span class="status-chip ${row.status === "sent" ? "sent" : ""}">${row.status || "pending"}</span></td>
       <td>${row.source || "beta_page"}</td>
       <td>${formatDate(row.created_at)}</td>
+      <td>
+        ${row.status === "sent"
+          ? formatDate(row.sent_at)
+          : `<button class="table-action" type="button" data-mark-sent="${row.id}">Mark sent</button>`}
+      </td>
     </tr>
   `).join("");
+}
+
+async function markWaitlistSent(id) {
+  const { error } = await window.flowbridgeDb
+    .from("beta_waitlist")
+    .update({
+      status: "sent",
+      sent_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  waitlistMessage.textContent = error ? `Could not mark sent: ${error.message}` : "Marked as sent.";
+  loadWaitlist();
 }
 
 adminLoginForm.addEventListener("submit", async (event) => {
@@ -300,6 +320,12 @@ tabs.forEach((tab) => {
 
 refreshAnalytics?.addEventListener("click", loadAnalytics);
 refreshWaitlist?.addEventListener("click", loadWaitlist);
+waitlistRows?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-mark-sent]");
+  if (!button) return;
+  markWaitlistSent(button.dataset.markSent);
+});
+
 copyWaitlistEmails?.addEventListener("click", async () => {
   const emails = waitlistCache.map((row) => row.email).filter(Boolean).join(", ");
   if (!emails) {
@@ -309,6 +335,22 @@ copyWaitlistEmails?.addEventListener("click", async () => {
 
   await navigator.clipboard.writeText(emails);
   waitlistMessage.textContent = "Waitlist emails copied.";
+});
+
+copyPendingEmails?.addEventListener("click", async () => {
+  const emails = waitlistCache
+    .filter((row) => (row.status || "pending") !== "sent")
+    .map((row) => row.email)
+    .filter(Boolean)
+    .join(", ");
+
+  if (!emails) {
+    waitlistMessage.textContent = "No pending emails to copy.";
+    return;
+  }
+
+  await navigator.clipboard.writeText(emails);
+  waitlistMessage.textContent = "Pending emails copied.";
 });
 
 form.addEventListener("input", renderPreview);

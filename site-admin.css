@@ -418,6 +418,36 @@
   color: #475569;
 }
 
+.status-chip {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: #92400e;
+  background: #fef3c7;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.status-chip.sent {
+  color: #047857;
+  background: #dcfce7;
+}
+
+.table-action {
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 10px;
+  color: #334155;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .admin-note h3 {
   margin: 0;
 }
