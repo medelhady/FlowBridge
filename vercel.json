@@ -9,6 +9,10 @@
     {
       "source": "/affiliate-dashboard",
       "destination": "/affiliate-dashboard.html"
+    },
+    {
+      "source": "/site-admin",
+      "destination": "/site-admin.html"
     }
   ]
 }

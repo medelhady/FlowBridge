@@ -155,95 +155,75 @@
         </div>
 
         <div class="pricing-layout">
-                    <div class="pricing-grid">
-            <article class="plan" data-plan="starter">
-              <div class="plan-top">
-                <div>
-                  <h3>Starter</h3>
-                  <p>For light usage on one machine.</p>
-                </div>
-                <span>Solo</span>
+          <div class="launch-offer">
+            <div class="launch-copy">
+              <span>Limited beta launch</span>
+              <h3>First 100 users get FlowBridge for $39/year.</h3>
+              <p>Windows beta is open now with a 14-day trial. After the first 100 seats, yearly pricing returns to the regular plan.</p>
+            </div>
+            <div class="launch-progress" aria-label="Launch offer progress">
+              <div class="launch-count">
+                <strong>34</strong>
+                <small>/ 100 claimed</small>
               </div>
-              <div class="price-line">
-                <strong data-monthly="$6" data-yearly="$60">$6</strong>
-                <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
-              </div>
-              <p class="price-note" data-monthly="Start small with every AI assistant connected." data-yearly="Two months free for your first FlowBridge machine.">Start small with every AI assistant connected.</p>
-              <div class="device-meter" aria-label="One active device">
-                <span class="device active"></span>
-                <span class="device"></span>
-              </div>
-              <ul>
-                <li>1 active device</li>
-                <li>ChatGPT, Claude, Gemini, and Grok</li>
-                <li>Bridge button on code blocks</li>
-                <li>Basic command confirmation</li>
-                <li>Last 25 commands in history</li>
-              </ul>
-              <button class="secondary-btn plan-select" type="button" data-plan="starter">Start free with Starter</button>
-            </article>
+              <div class="progress-track"><span style="width: 34%"></span></div>
+            </div>
+            <a class="primary-btn" href="https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip">Download beta</a>
+          </div>
 
-            <article class="plan featured selected" data-plan="pro">
-              <div class="plan-ribbon">Best for most users</div>
-              <div class="plan-top">
-                <div>
-                  <h3>Pro</h3>
-                  <p>For daily use on your main machine.</p>
+          <div class="pricing-terminal" aria-label="FlowBridge pricing terminal">
+            <div class="pricing-terminal-top">
+              <span></span>
+              <span></span>
+              <span></span>
+              <strong>flowbridge plans</strong>
+            </div>
+            <div class="pricing-grid">
+              <article class="plan terminal-plan featured selected" data-plan="solo">
+                <div class="cli-head">
+                  <h3>Solo</h3>
+                  <span>1 device</span>
                 </div>
-                <span>Recommended</span>
-              </div>
-              <div class="price-line">
-                <strong data-monthly="$9" data-yearly="$90">$9</strong>
-                <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
-              </div>
-              <p class="price-note" data-monthly="Security controls, longer history, and a polished daily workflow." data-yearly="Two months free for power users on one device.">Security controls, longer history, and a polished daily workflow.</p>
-              <div class="device-meter" aria-label="One active device">
-                <span class="device active"></span>
-                <span class="device"></span>
-              </div>
-              <ul>
-                <li>1 active device</li>
-                <li>Security Mode: Normal and Strict</li>
-                <li>Risk warnings before commands</li>
-                <li>Last 250 commands in history</li>
-                <li>Button style customization</li>
-              </ul>
-              <button class="primary-btn plan-select" type="button" data-plan="pro">Try Pro free</button>
-            </article>
+                <div class="price-line">
+                  <strong data-monthly="$9" data-yearly="$90">$9</strong>
+                  <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
+                </div>
+                <p class="cli-command">$ flowbridge activate --plan solo<span class="cli-cursor"></span></p>
+                <ul>
+                  <li>ChatGPT, Claude, Gemini, and Grok</li>
+                  <li>Bridge button on code blocks</li>
+                  <li>Approval before running commands</li>
+                  <li>Windows beta access</li>
+                </ul>
+                <button class="primary-btn plan-select" type="button" data-plan="solo">Start Solo</button>
+              </article>
 
-            <article class="plan" data-plan="duo">
-              <div class="plan-top">
-                <div>
+              <article class="plan terminal-plan" data-plan="duo">
+                <div class="cli-head">
                   <h3>Duo</h3>
-                  <p>For your laptop and desktop setup.</p>
+                  <span>2 devices</span>
                 </div>
-                <span>2 devices</span>
-              </div>
-              <div class="price-line">
-                <strong data-monthly="$15" data-yearly="$150">$15</strong>
-                <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
-              </div>
-              <p class="price-note" data-monthly="Use FlowBridge on two active devices with priority support." data-yearly="Two months free for a two-device workflow.">Use FlowBridge on two active devices with priority support.</p>
-              <div class="device-meter" aria-label="Two active devices">
-                <span class="device active"></span>
-                <span class="device active"></span>
-              </div>
-              <ul>
-                <li>2 active devices</li>
-                <li>Everything in Pro</li>
-                <li>Longer command history</li>
-                <li>Priority support</li>
-                <li>Early access to sync features</li>
-              </ul>
-              <button class="secondary-btn plan-select" type="button" data-plan="duo">Start free with Duo</button>
-            </article>
+                <div class="price-line">
+                  <strong data-monthly="$15" data-yearly="$150">$15</strong>
+                  <small data-monthly="/ mo" data-yearly="/ yr">/ mo</small>
+                </div>
+                <p class="cli-command">$ flowbridge activate --plan duo</p>
+                <ul>
+                  <li>Everything in Solo</li>
+                  <li>Laptop + desktop setup</li>
+                  <li>Priority support</li>
+                  <li>Early access to sync features</li>
+                </ul>
+                <button class="secondary-btn plan-select" type="button" data-plan="duo">Start Duo</button>
+              </article>
+            </div>
           </div>
 
           <div class="lifetime-offer">
             <div>
               <span>Early access lifetime</span>
               <h3>Own FlowBridge forever for your first machine.</h3>
-              <p>Launch offer: $99 for the first 50 users, then $149. Includes Pro features, future updates for one device, and early access to security improvements.</p>
+              <p>Launch offer: $99 for the first 50 users, then $149. Includes FlowBridge features, future updates for one device, and early access to security improvements.</p>
             </div>
             <strong>$149<small> one-time</small></strong>
             <a class="primary-btn" href="#">Claim lifetime access</a>
@@ -251,9 +231,9 @@
 
           <div class="pricing-cta" aria-live="polite">
             <div>
-              <span id="previewPlan">Pro selected</span>
+              <span id="previewPlan">Solo selected</span>
               <strong><span id="previewPrice">$9</span><small id="previewPeriod">/ mo</small></strong>
-              <p id="previewCopy">Use FlowBridge daily with security controls, command history, and a 7-day free trial.</p>
+              <p id="previewCopy">Use FlowBridge on one device with every supported AI assistant and a 7-day free trial.</p>
             </div>
             <div class="cta-flow" aria-label="Two-way bridge">
               <span>Terminal</span>
@@ -288,6 +268,10 @@
         </div>
       </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
+    <script src="./site-settings.js"></script>
     <script src="./command-palette.js"></script>
   </body>
 </html>

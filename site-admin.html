@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlowBridge Site Dashboard</title>
+    <link rel="stylesheet" href="./command-palette.css" />
+    <link rel="stylesheet" href="./site-admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <header class="admin-hero">
+        <div>
+          <p class="eyebrow">Site dashboard</p>
+          <h1>Control FlowBridge landing content.</h1>
+          <p>Change pricing, launch offer, download link, and lifetime copy without touching the page code.</p>
+        </div>
+        <a class="secondary-btn" href="./index.html">Open site</a>
+      </header>
+
+      <form class="admin-panel" id="siteSettingsForm">
+        <section>
+          <h2>Launch Offer</h2>
+          <label>
+            Label
+            <input name="launchLabel" />
+          </label>
+          <label>
+            Title
+            <input name="launchTitle" />
+          </label>
+          <label>
+            Description
+            <textarea name="launchCopy" rows="3"></textarea>
+          </label>
+          <div class="admin-grid">
+            <label>
+              Claimed seats
+              <input name="launchClaimed" type="number" min="0" />
+            </label>
+            <label>
+              Total seats
+              <input name="launchTotal" type="number" min="1" />
+            </label>
+          </div>
+          <label>
+            Download URL
+            <input name="downloadUrl" />
+          </label>
+        </section>
+
+        <section>
+          <h2>Pricing</h2>
+          <div class="admin-grid">
+            <label>
+              Solo monthly
+              <input name="soloMonthly" />
+            </label>
+            <label>
+              Solo yearly
+              <input name="soloYearly" />
+            </label>
+            <label>
+              Duo monthly
+              <input name="duoMonthly" />
+            </label>
+            <label>
+              Duo yearly
+              <input name="duoYearly" />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Lifetime</h2>
+          <label>
+            Lifetime price
+            <input name="lifetimePrice" />
+          </label>
+          <label>
+            Lifetime copy
+            <textarea name="lifetimeCopy" rows="3"></textarea>
+          </label>
+        </section>
+
+        <div class="admin-actions">
+          <button class="primary-btn" type="submit">Save changes</button>
+          <button class="secondary-btn" type="button" id="previewButton">Preview locally</button>
+          <button class="secondary-btn" type="button" id="resetButton">Reset</button>
+          <p id="adminMessage" role="status"></p>
+        </div>
+      </form>
+
+      <section class="admin-note">
+        <h2>Database setup</h2>
+        <p>For live updates on Vercel, create this table in Supabase once:</p>
+        <pre><code>create table if not exists site_settings (
+  id text primary key,
+  content jsonb not null,
+  updated_at timestamptz default now()
+);</code></pre>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./supabase-db.js"></script>
+    <script src="./site-settings.js"></script>
+    <script src="./site-admin.js"></script>
+  </body>
+</html>
