@@ -16,6 +16,12 @@ window.FLOWBRIDGE_SITE_DEFAULTS = {
 
 window.FLOWBRIDGE_SITE_SETTINGS = { ...window.FLOWBRIDGE_SITE_DEFAULTS };
 
+function canUseLocalPreview() {
+  return location.protocol === "file:"
+    || location.hostname === "localhost"
+    || location.hostname === "127.0.0.1";
+}
+
 function applyStoredSettings(settings) {
   window.FLOWBRIDGE_SITE_SETTINGS = {
     ...window.FLOWBRIDGE_SITE_DEFAULTS,
@@ -27,7 +33,9 @@ function applyStoredSettings(settings) {
 }
 
 async function loadSiteSettings() {
-  const localDraft = localStorage.getItem("flowbridge_site_settings_preview");
+  const localDraft = canUseLocalPreview()
+    ? localStorage.getItem("flowbridge_site_settings_preview")
+    : null;
   if (localDraft) {
     try {
       applyStoredSettings(JSON.parse(localDraft));
