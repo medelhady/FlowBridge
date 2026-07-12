@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "FlowBridge",
+  "version": "1.3",
+  "description": "A smart bridge between the terminal and multiple AI chat assistants with full automation",
+  "permissions": [
+    "clipboardRead",
+    "downloads"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*",
+        "https://grok.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ]
+}

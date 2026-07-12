@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "bridge_server.py", line 278, in <module>
+  File "bridge_server.py", line 265, in run
+  File "bridge_server.py", line 54, in reset_last_output
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\user\\Documents\\Codex\\2026-07-06\\new-chat\\work\\flowbridge\\dist\\flowbridge_data\\last_output.txt'

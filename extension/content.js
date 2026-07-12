@@ -1,4 +1,4 @@
-﻿// ==================== FlowBridge Character: Terminal Output Fetcher ====================
+// ==================== FlowBridge Character: Terminal Output Fetcher ====================
 const fbCharStyle = document.createElement('style');
 fbCharStyle.textContent = `
 @keyframes fb-peek-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
@@ -17,8 +17,8 @@ fbCharStyle.textContent = `
 #fb-eyes-open, #fb-eyes-closed { transition: opacity 0.2s ease; }
 #fb-eyes-closed { opacity: 0; }
 #fb-char-wrap.sleeping { animation: none; transform: translateY(24px); }
-#fb-char-wrap.sleeping .fb-head { fill: #6B7280; }
-#fb-char-wrap.sleeping .fb-grip-l, #fb-char-wrap.sleeping .fb-grip-r { fill: #6B7280; animation: none; }
+#fb-char-wrap.sleeping .fb-head { fill: #475569; }
+#fb-char-wrap.sleeping .fb-grip-l, #fb-char-wrap.sleeping .fb-grip-r { fill: #475569; animation: none; }
 #fb-char-wrap.sleeping #fb-eyes-open { opacity: 0; }
 #fb-char-wrap.sleeping #fb-eyes-closed { opacity: 1; }
 #fb-char-wrap.sleeping #fb-mouth-normal { opacity: 0; }
@@ -29,10 +29,10 @@ const fbCharWrap = document.createElement('div');
 fbCharWrap.id = 'fb-char-wrap';
 fbCharWrap.innerHTML = `
 <svg width="56" height="40" viewBox="0 0 78 56">
-  <circle class="fb-head" cx="39" cy="30" r="26" fill="#1E1B4B"/>
+  <circle class="fb-head" cx="39" cy="30" r="26" fill="#0B1220"/>
   <g class="fb-eyes" id="fb-eyes-open">
-    <circle cx="27" cy="26" r="9" fill="#ffffff"/><circle cx="27" cy="26" r="4.5" fill="#0F0D2B"/><circle cx="29" cy="24" r="1.5" fill="#ffffff"/>
-    <circle cx="51" cy="26" r="9" fill="#ffffff"/><circle cx="51" cy="26" r="4.5" fill="#0F0D2B"/><circle cx="53" cy="24" r="1.5" fill="#ffffff"/>
+    <circle cx="27" cy="26" r="9" fill="#ECFEFF"/><circle cx="27" cy="26" r="4.5" fill="#020617"/><circle cx="29" cy="24" r="1.5" fill="#ffffff"/>
+    <circle cx="51" cy="26" r="9" fill="#ECFEFF"/><circle cx="51" cy="26" r="4.5" fill="#020617"/><circle cx="53" cy="24" r="1.5" fill="#ffffff"/>
   </g>
   <g id="fb-eyes-closed">
     <path d="M20 26 Q27 30 34 26" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
@@ -40,8 +40,8 @@ fbCharWrap.innerHTML = `
   </g>
   <path id="fb-mouth-normal" d="M32 40 Q39 44 46 40" stroke="#34D399" stroke-width="2.2" fill="none" stroke-linecap="round"/>
   <path id="fb-mouth-happy" d="M29 39 Q39 49 49 39 Q39 47 29 39 Z" fill="#34D399"/>
-  <g class="fb-grip-l"><ellipse cx="6" cy="50" rx="8" ry="6.5" fill="#1E1B4B"/></g>
-  <g class="fb-grip-r"><ellipse cx="72" cy="50" rx="8" ry="6.5" fill="#1E1B4B"/></g>
+  <g class="fb-grip-l"><ellipse cx="6" cy="50" rx="8" ry="6.5" fill="#0B1220"/></g>
+  <g class="fb-grip-r"><ellipse cx="72" cy="50" rx="8" ry="6.5" fill="#0B1220"/></g>
 </svg>
 `;
 document.body.appendChild(fbCharWrap);
@@ -175,8 +175,8 @@ fbRunCss.textContent = `
 .fb-gemini-run-row { display: flex !important; justify-content: flex-end; align-items: center; margin: 0 0 6px 0; min-height: 34px; }
 .fb-gemini-run-row .fb-run-btn { display: inline-flex !important; }
 pre .fb-run-btn, pre button[title="Run in Terminal"] { display: none !important; }
-.fb-run-btn .fb-bridge-spark { animation: fb-bridge-spark 1.15s ease-in-out infinite; color: #34d399; text-shadow: 0 0 10px rgba(52, 211, 153, .9); }
-.fb-run-btn:hover { box-shadow: 0 0 24px rgba(52, 211, 153, .42) !important; transform: translateY(-1px); }
+.fb-run-btn .fb-bridge-spark { animation: fb-bridge-spark 1.15s ease-in-out infinite; color: #22d3ee; text-shadow: 0 0 10px rgba(34, 211, 238, .9); }
+.fb-run-btn:hover { box-shadow: 0 0 24px rgba(34, 211, 238, .36), 0 0 18px rgba(52, 211, 153, .28) !important; transform: translateY(-1px); }
 @keyframes fb-bridge-spark {
     0%, 100% { opacity: .62; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.28); }
@@ -201,7 +201,7 @@ function fbGetCodeText(block) {
 
 function fbMakeRunButton(block) {
     const btn = document.createElement('button');
-    btn.innerHTML = '<span class="fb-bridge-spark">↯</span><span>Bridge</span>';
+    btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Bridge</span>';
     btn.className = 'fb-run-btn';
     btn.type = 'button';
     btn.title = 'Run in Terminal';
@@ -209,16 +209,16 @@ function fbMakeRunButton(block) {
     btn.style.justifyContent = 'center';
     btn.style.gap = '7px';
     btn.style.padding = '6px 12px';
-    btn.style.backgroundColor = '#0f172a';
-    btn.style.color = '#34d399';
-    btn.style.border = '1px solid rgba(52, 211, 153, 0.55)';
+    btn.style.backgroundColor = '#0b1220';
+    btn.style.color = '#a7f3d0';
+    btn.style.border = '1px solid rgba(34, 211, 238, 0.5)';
     btn.style.borderRadius = '7px';
     btn.style.fontSize = '12px';
     btn.style.fontWeight = '700';
     btn.style.cursor = 'pointer';
     btn.style.lineHeight = '1.4';
-    btn.style.textShadow = '0 0 8px rgba(52, 211, 153, 0.75)';
-    btn.style.boxShadow = '0 0 18px rgba(52, 211, 153, 0.25)';
+    btn.style.textShadow = '0 0 8px rgba(34, 211, 238, 0.55)';
+    btn.style.boxShadow = '0 0 18px rgba(34, 211, 238, 0.18), inset 0 0 0 1px rgba(52, 211, 153, 0.12)';
     btn.onclick = () => {
         const command = fbGetCodeText(block);
         if (!command) return;
@@ -229,13 +229,13 @@ function fbMakeRunButton(block) {
             body: JSON.stringify({ command })
         })
         .then(() => {
-            btn.innerHTML = '<span class="fb-bridge-spark">↯</span><span>Sent</span>';
+            btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Sent</span>';
             btn.style.backgroundColor = '#16a34a';
             btn.style.color = '#ffffff';
             setTimeout(() => {
-                btn.innerHTML = '<span class="fb-bridge-spark">↯</span><span>Bridge</span>';
-                btn.style.backgroundColor = '#0f172a';
-                btn.style.color = '#34d399';
+                btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Bridge</span>';
+                btn.style.backgroundColor = '#0b1220';
+                btn.style.color = '#a7f3d0';
             }, 2000);
         })
         .catch(() => {
@@ -303,7 +303,7 @@ function fbCleanupRunControls() {
 
     document.querySelectorAll('button').forEach(btn => {
         const text = (btn.innerText || '').trim();
-        if (text !== 'Run' && text !== '↯Bridge' && text !== '↯ Bridge' && text !== '↯Sent' && text !== '↯ Sent') return;
+        if (text !== 'Run' && text !== '?Bridge' && text !== '? Bridge' && text !== '?Sent' && text !== '? Sent') return;
         if (btn.closest('.fb-run-row')) return;
         if (btn.closest('.fb-gemini-run-row')) return;
         if (btn.title === 'Run in Terminal' || btn.classList.contains('fb-run-btn')) btn.remove();
