@@ -17,6 +17,10 @@
     {
       "source": "/beta",
       "destination": "/beta.html"
+    },
+    {
+      "source": "/refund-policy",
+      "destination": "/refund-policy.html"
     }
   ]
 }
