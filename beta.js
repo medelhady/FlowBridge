@@ -59,32 +59,30 @@ betaForm.addEventListener("submit", async (event) => {
   if (!email) return;
 
   betaSubmit.disabled = true;
-  betaSubmit.textContent = "Saving...";
-  betaMessage.textContent = "Adding you to the beta list...";
+  betaSubmit.textContent = "Sending...";
+  betaMessage.textContent = "Preparing your beta link...";
 
-  if (!window.flowbridgeDb) {
+  try {
+    const response = await fetch("/api/send-beta-link", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.error || "Could not send yet.");
+    }
+
+    betaForm.reset();
+    betaMessage.textContent = "Done. Check your email for the beta download link.";
+  } catch (error) {
+    betaMessage.textContent = "Saved, but email delivery is not ready yet. We will send the link soon.";
+  } finally {
     betaSubmit.disabled = false;
     betaSubmit.textContent = "Send me the beta link";
-    betaMessage.textContent = "Saved locally for preview. Supabase is not connected yet.";
-    localStorage.setItem("flowbridge_beta_email", email);
-    return;
   }
-
-  const { error } = await window.flowbridgeDb.from("beta_waitlist").insert({
-    email,
-    source: "beta_page",
-  });
-
-  betaSubmit.disabled = false;
-  betaSubmit.textContent = "Send me the beta link";
-
-  if (error) {
-    betaMessage.textContent = error.code === "23505"
-      ? "You are already on the beta list. We will email you the link."
-      : "Could not save yet. Try again in a moment.";
-    return;
-  }
-
-  betaForm.reset();
-  betaMessage.textContent = "You are on the beta list. We will email the download link soon.";
 });
