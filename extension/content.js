@@ -3,12 +3,10 @@ const fbCharStyle = document.createElement('style');
 fbCharStyle.textContent = `
 @keyframes fb-peek-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @keyframes fb-eye-track { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(2.5px); } 70% { transform: translateX(-2.5px); } }
-@keyframes fb-grip-wiggle { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-6deg); } }
+50% { transform: rotate(-6deg); } }
 @keyframes fb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.15); } 100% { transform: scale(1); } }
 #fb-char-wrap { position: fixed; z-index: 99999; cursor: pointer; animation: fb-peek-bob 2.2s ease-in-out infinite; transition: transform 0.4s ease; }
 #fb-char-wrap .fb-eyes { animation: fb-eye-track 2.4s ease-in-out infinite; }
-#fb-char-wrap .fb-grip-l { animation: fb-grip-wiggle 1.6s ease-in-out infinite; transform-origin: 6px 50px; }
-#fb-char-wrap .fb-grip-r { animation: fb-grip-wiggle 1.6s ease-in-out infinite reverse; transform-origin: 72px 50px; }
 #fb-mouth-normal, #fb-mouth-happy { transition: opacity 0.2s ease; }
 #fb-mouth-happy { opacity: 0; }
 #fb-char-wrap.happy #fb-mouth-normal { opacity: 0; }
@@ -18,7 +16,6 @@ fbCharStyle.textContent = `
 #fb-eyes-closed { opacity: 0; }
 #fb-char-wrap.sleeping { animation: none; transform: translateY(24px); }
 #fb-char-wrap.sleeping .fb-head { fill: #475569; }
-#fb-char-wrap.sleeping .fb-grip-l, #fb-char-wrap.sleeping .fb-grip-r { fill: #475569; animation: none; }
 #fb-char-wrap.sleeping #fb-eyes-open { opacity: 0; }
 #fb-char-wrap.sleeping #fb-eyes-closed { opacity: 1; }
 #fb-char-wrap.sleeping #fb-mouth-normal { opacity: 0; }
@@ -28,7 +25,7 @@ document.head.appendChild(fbCharStyle);
 const fbCharWrap = document.createElement('div');
 fbCharWrap.id = 'fb-char-wrap';
 fbCharWrap.innerHTML = `
-<svg width="56" height="40" viewBox="0 0 78 56">
+<svg width="52" height="52" viewBox="0 0 78 56">
   <circle class="fb-head" cx="39" cy="30" r="26" fill="#0B1220"/>
   <g class="fb-eyes" id="fb-eyes-open">
     <circle cx="27" cy="26" r="9" fill="#ECFEFF"/><circle cx="27" cy="26" r="4.5" fill="#020617"/><circle cx="29" cy="24" r="1.5" fill="#ffffff"/>
@@ -40,8 +37,6 @@ fbCharWrap.innerHTML = `
   </g>
   <path id="fb-mouth-normal" d="M32 40 Q39 44 46 40" stroke="#34D399" stroke-width="2.2" fill="none" stroke-linecap="round"/>
   <path id="fb-mouth-happy" d="M29 39 Q39 49 49 39 Q39 47 29 39 Z" fill="#34D399"/>
-  <g class="fb-grip-l"><ellipse cx="6" cy="50" rx="8" ry="6.5" fill="#0B1220"/></g>
-  <g class="fb-grip-r"><ellipse cx="72" cy="50" rx="8" ry="6.5" fill="#0B1220"/></g>
 </svg>
 `;
 document.body.appendChild(fbCharWrap);
