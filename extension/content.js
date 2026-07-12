@@ -185,6 +185,11 @@ pre .fb-run-btn, pre button[title="Run in Terminal"] { display: none !important;
 document.head.appendChild(fbRunCss);
 
 let fbCodeBlockCounter = 0;
+const fbBridgeIcon = '<svg class="fb-bridge-spark" width="13" height="15" viewBox="0 0 13 15" fill="none" aria-hidden="true"><path d="M7.4 1 2.1 7.7h4.2L5.6 14l5.3-7.5H6.8L7.4 1Z" fill="currentColor"/><path d="M2.8 10.8 1 12.1M11.8 2.8 10 4.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
+function fbButtonLabel(label) {
+    return `${fbBridgeIcon}<span>${label}</span>`;
+}
 
 function fbGetStableCodeBlockId(block) {
     if (!block.dataset.fbCodeBlockId) {
@@ -201,7 +206,7 @@ function fbGetCodeText(block) {
 
 function fbMakeRunButton(block) {
     const btn = document.createElement('button');
-    btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Bridge</span>';
+    btn.innerHTML = fbButtonLabel('Bridge');
     btn.className = 'fb-run-btn';
     btn.type = 'button';
     btn.title = 'Run in Terminal';
@@ -229,11 +234,11 @@ function fbMakeRunButton(block) {
             body: JSON.stringify({ command })
         })
         .then(() => {
-            btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Sent</span>';
+            btn.innerHTML = fbButtonLabel('Sent');
             btn.style.backgroundColor = '#16a34a';
             btn.style.color = '#ffffff';
             setTimeout(() => {
-                btn.innerHTML = '<span class="fb-bridge-spark">?</span><span>Bridge</span>';
+                btn.innerHTML = fbButtonLabel('Bridge');
                 btn.style.backgroundColor = '#0b1220';
                 btn.style.color = '#a7f3d0';
             }, 2000);
@@ -303,7 +308,7 @@ function fbCleanupRunControls() {
 
     document.querySelectorAll('button').forEach(btn => {
         const text = (btn.innerText || '').trim();
-        if (text !== 'Run' && text !== '?Bridge' && text !== '? Bridge' && text !== '?Sent' && text !== '? Sent') return;
+        if (!['Run', 'Bridge', 'Sent', 'Offline', '?Bridge', '? Bridge', '?Sent', '? Sent'].includes(text)) return;
         if (btn.closest('.fb-run-row')) return;
         if (btn.closest('.fb-gemini-run-row')) return;
         if (btn.title === 'Run in Terminal' || btn.classList.contains('fb-run-btn')) btn.remove();
