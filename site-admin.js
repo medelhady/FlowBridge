@@ -25,6 +25,11 @@ const waitlistToday = document.querySelector("#waitlistToday");
 const waitlistLatest = document.querySelector("#waitlistLatest");
 const waitlistRows = document.querySelector("#waitlistRows");
 const waitlistMessage = document.querySelector("#waitlistMessage");
+const roadmapInput = document.querySelector("#roadmapInput");
+const addRoadmapNote = document.querySelector("#addRoadmapNote");
+const clearDoneNotes = document.querySelector("#clearDoneNotes");
+const roadmapList = document.querySelector("#roadmapList");
+const roadmapMessage = document.querySelector("#roadmapMessage");
 const tabs = document.querySelectorAll(".admin-tab");
 const panels = document.querySelectorAll(".admin-section");
 
@@ -44,7 +49,16 @@ const previewDuo = document.querySelector("#previewDuo");
 const ADMIN_SESSION_KEY = "flowbridge_admin_signed_in";
 const ADMIN_EMAIL_KEY = "flowbridge_admin_email";
 const ADMIN_PASSWORD_KEY = "flowbridge_admin_password";
+const DEFAULT_ROADMAP = [
+  "When FlowBridge is sleeping, hide all Bridge buttons from code blocks immediately.",
+  "Add a recognizable FlowBridge logo and match the tool colors with the coding website theme.",
+  "Connect Resend later to email the beta download link automatically and mark waitlist emails as sent.",
+  "Prevent running two bridge server instances at the same time.",
+  "Add direct download from the website instead of relying on GitHub releases.",
+  "Add launch offer progress: first 100 users at $39/year, with a slow live counter animation.",
+];
 let waitlistCache = [];
+let roadmapNotes = [];
 
 function setAdminVisible(isSignedIn) {
   adminLogin.hidden = isSignedIn;
@@ -121,6 +135,7 @@ function showTab(tabId) {
   });
   if (tabId === "analytics") loadAnalytics();
   if (tabId === "waitlist") loadWaitlist();
+  if (tabId === "roadmap") loadRoadmap();
 }
 
 function formatDate(value) {
@@ -240,6 +255,199 @@ async function markWaitlistSent(id) {
   loadWaitlist();
 }
 
+function loadRoadmap() {
+  const saved = localStorage.getItem(ROADMAP_KEY);
+  if (saved) {
+    roadmapNotes = JSON.parse(saved);
+    return;
+  }
+
+  roadmapNotes = DEFAULT_ROADMAP.map((text, index) => ({
+    id: `default-${index}`,
+    text,
+    done: false,
+    createdAt: new Date().toISOString(),
+  }));
+  saveRoadmap();
+}
+
+function saveRoadmap() {
+  localStorage.setItem(ROADMAP_KEY, JSON.stringify(roadmapNotes));
+}
+
+function renderRoadmap() {
+  if (!roadmapList) return;
+
+  if (!roadmapNotes.length) {
+    roadmapList.innerHTML = '<div class="admin-note"><p>No roadmap notes yet.</p></div>';
+    return;
+  }
+
+  roadmapList.innerHTML = roadmapNotes.map((note) => `
+    <article class="roadmap-item ${note.done ? "done" : ""}">
+      <input type="checkbox" data-roadmap-toggle="${note.id}" ${note.done ? "checked" : ""} aria-label="Mark note done" />
+      <div>
+        <strong>${note.text}</strong>
+        <small>${note.done ? "Done" : "Open"} · ${new Date(note.createdAt).toLocaleDateString()}</small>
+      </div>
+      <button class="roadmap-delete" type="button" data-roadmap-delete="${note.id}">Remove</button>
+    </article>
+  `).join("");
+}
+
+function addNote() {
+  const text = roadmapInput.value.trim();
+  if (!text) return;
+
+  roadmapNotes.unshift({
+    id: `${Date.now()}`,
+    text,
+    done: false,
+    createdAt: new Date().toISOString(),
+  });
+  roadmapInput.value = "";
+  saveRoadmap();
+  renderRoadmap();
+  roadmapMessage.textContent = "Note added.";
+}
+
+function seedLocalRoadmap() {
+  roadmapNotes = DEFAULT_ROADMAP.map((text, index) => ({
+    id: `local-${index}`,
+    text,
+    done: false,
+    created_at: new Date().toISOString(),
+  }));
+}
+
+function renderRoadmapNoteDate(note) {
+  return new Date(note.created_at || note.createdAt || Date.now()).toLocaleDateString();
+}
+
+function renderRoadmap() {
+  if (!roadmapList) return;
+
+  if (!roadmapNotes.length) {
+    roadmapList.innerHTML = '<div class="admin-note"><p>No roadmap notes yet.</p></div>';
+    return;
+  }
+
+  roadmapList.innerHTML = roadmapNotes.map((note) => `
+    <article class="roadmap-item ${note.done ? "done" : ""}">
+      <input type="checkbox" data-roadmap-toggle="${note.id}" ${note.done ? "checked" : ""} aria-label="Mark note done" />
+      <div>
+        <strong>${note.text}</strong>
+        <small>${note.done ? "Done" : "Open"} - ${renderRoadmapNoteDate(note)}</small>
+      </div>
+      <button class="roadmap-delete" type="button" data-roadmap-delete="${note.id}">Remove</button>
+    </article>
+  `).join("");
+}
+
+async function loadRoadmap() {
+  if (!roadmapList) return;
+
+  roadmapList.innerHTML = '<div class="admin-note"><p>Loading roadmap notes...</p></div>';
+
+  if (!window.flowbridgeDb) {
+    seedLocalRoadmap();
+    renderRoadmap();
+    roadmapMessage.textContent = "Supabase is not connected. Showing starter notes only.";
+    return;
+  }
+
+  const { data, error } = await window.flowbridgeDb
+    .from("roadmap_notes")
+    .select("id,text,done,created_at")
+    .order("done", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    seedLocalRoadmap();
+    renderRoadmap();
+    roadmapMessage.textContent = "Roadmap table is not ready yet. Run the Supabase SQL first.";
+    return;
+  }
+
+  if (!data.length) {
+    await seedRoadmapDefaults();
+    return;
+  }
+
+  roadmapNotes = data;
+  roadmapMessage.textContent = "";
+  renderRoadmap();
+}
+
+async function seedRoadmapDefaults() {
+  const rows = DEFAULT_ROADMAP.map((text) => ({
+    text,
+    done: false,
+  }));
+
+  const { error } = await window.flowbridgeDb.from("roadmap_notes").insert(rows);
+  if (error) {
+    roadmapMessage.textContent = `Could not add starter notes: ${error.message}`;
+    return;
+  }
+
+  loadRoadmap();
+}
+
+async function addNote() {
+  const text = roadmapInput.value.trim();
+  if (!text) return;
+
+  if (!window.flowbridgeDb) {
+    roadmapMessage.textContent = "Supabase is not connected.";
+    return;
+  }
+
+  const { error } = await window.flowbridgeDb.from("roadmap_notes").insert({
+    text,
+    done: false,
+  });
+
+  if (error) {
+    roadmapMessage.textContent = `Could not add note: ${error.message}`;
+    return;
+  }
+
+  roadmapInput.value = "";
+  roadmapMessage.textContent = "Note added.";
+  loadRoadmap();
+}
+
+async function updateRoadmapDone(id, done) {
+  const { error } = await window.flowbridgeDb
+    .from("roadmap_notes")
+    .update({ done })
+    .eq("id", id);
+
+  roadmapMessage.textContent = error ? `Could not update note: ${error.message}` : "";
+  loadRoadmap();
+}
+
+async function removeRoadmapNote(id) {
+  const { error } = await window.flowbridgeDb
+    .from("roadmap_notes")
+    .delete()
+    .eq("id", id);
+
+  roadmapMessage.textContent = error ? `Could not remove note: ${error.message}` : "Note removed.";
+  loadRoadmap();
+}
+
+async function clearDoneRoadmapNotes() {
+  const { error } = await window.flowbridgeDb
+    .from("roadmap_notes")
+    .delete()
+    .eq("done", true);
+
+  roadmapMessage.textContent = error ? `Could not clear done notes: ${error.message}` : "Done notes cleared.";
+  loadRoadmap();
+}
+
 adminLoginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const email = adminEmailInput.value.trim().toLowerCase();
@@ -278,6 +486,7 @@ logoutButton.addEventListener("click", () => {
 });
 
 checkAdminSession();
+loadRoadmap();
 
 addAdminButton.addEventListener("click", async () => {
   const currentEmail = sessionStorage.getItem(ADMIN_EMAIL_KEY);
@@ -316,6 +525,28 @@ addAdminButton.addEventListener("click", async () => {
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => showTab(tab.dataset.tab));
+});
+
+addRoadmapNote?.addEventListener("click", addNote);
+roadmapInput?.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  addNote();
+});
+clearDoneNotes?.addEventListener("click", () => {
+  clearDoneRoadmapNotes();
+});
+roadmapList?.addEventListener("click", (event) => {
+  const toggle = event.target.closest("[data-roadmap-toggle]");
+  const remove = event.target.closest("[data-roadmap-delete]");
+
+  if (toggle) {
+    updateRoadmapDone(toggle.dataset.roadmapToggle, toggle.checked);
+  }
+
+  if (remove) {
+    removeRoadmapNote(remove.dataset.roadmapDelete);
+  }
 });
 
 refreshAnalytics?.addEventListener("click", loadAnalytics);
