@@ -7,6 +7,7 @@ import sys
 import threading
 import tempfile
 import urllib.request
+import ctypes
 if sys.stdout is None:
     class _Null:
         def write(self, *a): pass
@@ -40,6 +41,7 @@ OUTPUT_FILE = os.path.join(DATA_DIR, "last_output.txt")
 TRACE_FILE = os.path.join(DATA_DIR, "startup_trace.txt")
 SESSION_CONFIRMED = False
 SECURITY_MODE = "smart"
+INSTANCE_MUTEX = None
 
 def trace_startup(message):
     try:
@@ -54,6 +56,22 @@ def bridge_already_running():
             return response.status == 200
     except Exception:
         return False
+
+def acquire_single_instance_lock():
+    global INSTANCE_MUTEX
+    try:
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        mutex_name = "Global\\FlowBridgeBridgeServerSingleInstance"
+        handle = kernel32.CreateMutexW(None, False, mutex_name)
+        if not handle:
+            return True
+        last_error = ctypes.get_last_error()
+        if last_error == 183:
+            return False
+        INSTANCE_MUTEX = handle
+        return True
+    except Exception:
+        return True
 
 def reset_last_output():
     try:
@@ -298,6 +316,10 @@ class BridgeHandler(BaseHTTPRequestHandler):
 
 def run():
     trace_startup("run entered")
+    if not acquire_single_instance_lock():
+        trace_startup("single instance lock already held")
+        return
+
     if bridge_already_running():
         trace_startup("another bridge already running")
         return
