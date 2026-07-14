@@ -12,8 +12,8 @@ FLOWBRIDGE_BETA_DOWNLOAD_URL
 https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip
 
 FLOWBRIDGE_FROM_EMAIL
-FlowBridge <hello@flowbridge.app>
+FlowBridge <support@useflowbridge.com>
 
 Important:
-Use a verified domain in Resend before using hello@flowbridge.app.
+Use a verified domain in Resend before using support@useflowbridge.com.
 For quick testing, Resend may allow onboarding@resend.dev depending on your account limits.
