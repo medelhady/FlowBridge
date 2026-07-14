@@ -1,4 +1,6 @@
 const crypto = require("crypto");
+const SUPABASE_URL = "https://sztjlrowzagweqwhvgpm.supabase.co";
+const WEBHOOK_LOGS_TABLE = "paddle_webhook_logs";
 
 function send(response, payload, status = 200) {
   response.setHeader("Content-Type", "application/json");
@@ -73,6 +75,24 @@ function findCustomerId(event) {
     data.customer && data.customer.id,
     data.customer && data.customer.customer_id,
   ].find(Boolean);
+}
+
+async function saveWebhookLog(payload) {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey) {
+    return;
+  }
+
+  await fetch(`${SUPABASE_URL}/rest/v1/${WEBHOOK_LOGS_TABLE}`, {
+    method: "POST",
+    headers: {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify(payload),
+  }).catch(() => {});
 }
 
 async function fetchCustomerEmail(customerId) {
@@ -158,6 +178,8 @@ module.exports = async function handler(request, response) {
     verifyPaddleSignature(rawBody, request.headers["paddle-signature"]);
 
     const event = JSON.parse(rawBody || "{}");
+    const eventType = event.event_type || "unknown";
+    const customerId = findCustomerId(event) || null;
     const allowedEvents = new Set([
       "transaction.completed",
       "transaction.paid",
@@ -165,24 +187,47 @@ module.exports = async function handler(request, response) {
       "subscription.activated",
     ]);
 
-    if (!allowedEvents.has(event.event_type)) {
-      send(response, { ok: true, ignored: event.event_type || "unknown" });
+    if (!allowedEvents.has(eventType)) {
+      await saveWebhookLog({
+        status: "ignored",
+        event_type: eventType,
+        customer_id: customerId,
+        message: "Event type ignored",
+      });
+      send(response, { ok: true, ignored: eventType });
       return;
     }
 
     let email = findCustomerEmail(event);
     if (!email) {
-      email = await fetchCustomerEmail(findCustomerId(event));
+      email = await fetchCustomerEmail(customerId);
     }
 
     if (!email) {
+      await saveWebhookLog({
+        status: "skipped",
+        event_type: eventType,
+        customer_id: customerId,
+        message: "Customer email not found",
+      });
       send(response, { ok: true, skipped: "customer email not found" });
       return;
     }
 
     await sendPurchaseEmail(String(email).trim().toLowerCase());
+    await saveWebhookLog({
+      status: "sent",
+      event_type: eventType,
+      customer_id: customerId,
+      email: String(email).trim().toLowerCase(),
+      message: "Purchase email sent",
+    });
     send(response, { ok: true });
   } catch (error) {
+    await saveWebhookLog({
+      status: "failed",
+      message: error.message || "Webhook failed",
+    });
     send(response, { error: error.message || "Webhook failed" }, 400);
   }
 };
