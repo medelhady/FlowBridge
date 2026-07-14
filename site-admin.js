@@ -143,6 +143,16 @@ function formatDate(value) {
   return new Date(value).toLocaleString();
 }
 
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#039;",
+  })[char]);
+}
+
 function shortReferrer(value) {
   if (!value) return "Direct";
   try {
@@ -227,19 +237,29 @@ async function loadWaitlist() {
     return;
   }
 
-  waitlistRows.innerHTML = waitlistCache.map((row) => `
+  waitlistRows.innerHTML = waitlistCache.map((row) => {
+    const status = row.status || "pending";
+    const email = escapeHtml(row.email);
+    return `
     <tr>
-      <td>${row.email}</td>
-      <td><span class="status-chip ${row.status === "sent" ? "sent" : ""}">${row.status || "pending"}</span></td>
-      <td>${row.source || "beta_page"}</td>
-      <td>${formatDate(row.created_at)}</td>
       <td>
-        ${row.status === "sent"
-          ? formatDate(row.sent_at)
-          : `<button class="table-action" type="button" data-mark-sent="${row.id}">Mark sent</button>`}
+        <div class="email-cell">
+          <span>${email}</span>
+          <button class="mini-action" type="button" data-copy-email="${email}">Copy</button>
+        </div>
+      </td>
+      <td><span class="status-chip ${status}">${status}</span></td>
+      <td>${escapeHtml(row.source || "beta_page")}</td>
+      <td>${formatDate(row.created_at)}</td>
+      <td class="waitlist-actions">
+        <button class="table-action" type="button" data-resend-link="${email}">Resend link</button>
+        ${status === "sent"
+          ? `<span class="sent-time">${formatDate(row.sent_at)}</span>`
+          : `<button class="table-action muted" type="button" data-mark-sent="${row.id}">Mark sent</button>`}
       </td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 }
 
 async function markWaitlistSent(id) {
@@ -253,6 +273,33 @@ async function markWaitlistSent(id) {
 
   waitlistMessage.textContent = error ? `Could not mark sent: ${error.message}` : "Marked as sent.";
   loadWaitlist();
+}
+
+async function resendBetaLink(email) {
+  if (!email) return;
+
+  waitlistMessage.textContent = `Sending beta link to ${email}...`;
+
+  try {
+    const response = await fetch("/api/send-beta-link", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.error || "Could not resend link.");
+    }
+
+    waitlistMessage.textContent = `Beta link sent to ${email}.`;
+    loadWaitlist();
+  } catch (error) {
+    waitlistMessage.textContent = `Could not resend: ${error.message}`;
+    loadWaitlist();
+  }
 }
 
 function loadRoadmap() {
@@ -552,9 +599,24 @@ roadmapList?.addEventListener("click", (event) => {
 refreshAnalytics?.addEventListener("click", loadAnalytics);
 refreshWaitlist?.addEventListener("click", loadWaitlist);
 waitlistRows?.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-mark-sent]");
-  if (!button) return;
-  markWaitlistSent(button.dataset.markSent);
+  const markButton = event.target.closest("[data-mark-sent]");
+  const resendButton = event.target.closest("[data-resend-link]");
+  const copyButton = event.target.closest("[data-copy-email]");
+
+  if (markButton) {
+    markWaitlistSent(markButton.dataset.markSent);
+    return;
+  }
+
+  if (resendButton) {
+    resendBetaLink(resendButton.dataset.resendLink);
+    return;
+  }
+
+  if (copyButton) {
+    navigator.clipboard.writeText(copyButton.dataset.copyEmail);
+    waitlistMessage.textContent = "Email copied.";
+  }
 });
 
 copyWaitlistEmails?.addEventListener("click", async () => {

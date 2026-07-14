@@ -501,6 +501,30 @@
   background: #dcfce7;
 }
 
+.status-chip.failed {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.status-chip.pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.email-cell,
+.waitlist-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sent-time {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .table-action {
   min-height: 30px;
   border: 1px solid var(--line);
@@ -510,6 +534,30 @@
   background: #fff;
   font: inherit;
   font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.table-action:hover,
+.mini-action:hover {
+  border-color: rgba(37, 99, 235, 0.32);
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.table-action.muted {
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.mini-action {
+  min-height: 24px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 8px;
+  color: #64748b;
+  background: #fff;
+  font-size: 11px;
   font-weight: 900;
   cursor: pointer;
 }
