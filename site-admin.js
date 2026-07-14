@@ -171,28 +171,50 @@ async function loadAnalytics() {
 
   analyticsRows.innerHTML = '<tr><td colspan="4">Loading visits...</td></tr>';
 
-  const { data, error } = await window.flowbridgeDb
-    .from("visitor_events")
-    .select("created_at,page,country,city,region,referrer")
-    .order("created_at", { ascending: false })
-    .limit(80);
+  const [
+    visitsResult,
+    totalResult,
+    betaResult,
+    installResult,
+    downloadResult,
+  ] = await Promise.all([
+    window.flowbridgeDb
+      .from("visitor_events")
+      .select("created_at,page,country,city,region,referrer")
+      .order("created_at", { ascending: false })
+      .limit(120),
+    window.flowbridgeDb
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true }),
+    window.flowbridgeDb
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true })
+      .eq("page", "/beta"),
+    window.flowbridgeDb
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true })
+      .eq("page", "/install"),
+    window.flowbridgeDb
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true })
+      .eq("page", "/download"),
+  ]);
 
-  if (error) {
-    analyticsRows.innerHTML = `<tr><td colspan="4">Could not load analytics: ${error.message}</td></tr>`;
+  const { data, error } = visitsResult;
+
+  if (error || totalResult.error || betaResult.error || installResult.error || downloadResult.error) {
+    analyticsRows.innerHTML = `<tr><td colspan="4">Could not load visitors: ${(error || totalResult.error || betaResult.error || installResult.error || downloadResult.error).message}</td></tr>`;
     return;
   }
 
   const rows = data || [];
   const countries = new Set(rows.map((row) => row.country).filter(Boolean));
-  const betaVisits = rows.filter((row) => row.page === "/beta" || row.page.endsWith("/beta")).length;
-  const installViews = rows.filter((row) => row.page === "/install" || row.page.endsWith("/install")).length;
-  const downloads = rows.filter((row) => row.page === "/download" || row.page.endsWith("/download")).length;
 
-  analyticsTotal.textContent = String(rows.length);
+  analyticsTotal.textContent = String(totalResult.count ?? rows.length);
   analyticsCountries.textContent = String(countries.size);
-  analyticsBeta.textContent = String(betaVisits);
-  analyticsInstall.textContent = String(installViews);
-  analyticsDownloads.textContent = String(downloads);
+  analyticsBeta.textContent = String(betaResult.count ?? 0);
+  analyticsInstall.textContent = String(installResult.count ?? 0);
+  analyticsDownloads.textContent = String(downloadResult.count ?? 0);
 
   if (!rows.length) {
     analyticsRows.innerHTML = '<tr><td colspan="4">No visits yet.</td></tr>';
