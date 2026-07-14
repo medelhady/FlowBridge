@@ -1817,6 +1817,38 @@ h3 {
   font-weight: 900;
 }
 
+.download-card {
+  width: min(740px, calc(100% - 40px));
+  margin: 90px auto 120px;
+  padding: 38px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+}
+
+.download-card h1 {
+  margin: 8px 0 16px;
+  color: #07111f;
+  font-size: clamp(38px, 6vw, 74px);
+  line-height: 0.95;
+}
+
+.download-card p {
+  margin: 0;
+  max-width: 560px;
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
 @media (max-width: 900px) {
   .install-steps {
     grid-template-columns: 1fr;

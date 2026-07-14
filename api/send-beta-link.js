@@ -42,6 +42,7 @@ async function sendEmail(email) {
     || process.env.FLOWBRIDGE_BETA_DOWNLOAD_URL
     || "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip";
   const installUrl = process.env.INSTALL_GUIDE_URL || "https://useflowbridge.com/install";
+  const trackedDownloadUrl = process.env.TRACKED_DOWNLOAD_URL || "https://useflowbridge.com/download";
   const fromEmail = process.env.FROM_EMAIL
     || process.env.FLOWBRIDGE_FROM_EMAIL
     || "FlowBridge <support@useflowbridge.com>";
@@ -57,7 +58,7 @@ async function sendEmail(email) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge beta link",
-      text: `Your FlowBridge beta is ready.\n\nDownload it here:\n${downloadUrl}\n\nInstallation guide:\n${installUrl}\n\nWindows may show SmartScreen because this beta is not code-signed yet. Click More info, then Run anyway.\n\nThanks for helping test FlowBridge.\n\nFlowBridge Support\nsupport@useflowbridge.com`,
+      text: `Your FlowBridge beta is ready.\n\nDownload it here:\n${trackedDownloadUrl}\n\nInstallation guide:\n${installUrl}\n\nDirect download link:\n${downloadUrl}\n\nWindows may show SmartScreen because this beta is not code-signed yet. Click More info, then Run anyway.\n\nThanks for helping test FlowBridge.\n\nFlowBridge Support\nsupport@useflowbridge.com`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
@@ -65,7 +66,7 @@ async function sendEmail(email) {
           <h1 style="font-size:26px;line-height:1.1;margin:0 0 14px;color:#07111f">Your beta download is ready</h1>
           <p style="margin:0 0 18px">Thanks for helping test FlowBridge. Your honest feedback will shape the public launch.</p>
           <p>
-            <a href="${downloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
+            <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
               Download FlowBridge Beta
             </a>
             <a href="${installUrl}" style="display:inline-block;margin-left:8px;background:#e0f2fe;color:#075985;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
@@ -75,7 +76,8 @@ async function sendEmail(email) {
           <div style="margin:18px 0 0;padding:14px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;color:#0f172a;font-size:14px">
             <strong>Windows note:</strong> If SmartScreen appears, click <strong>More info</strong>, then <strong>Run anyway</strong>. This happens because the beta is not code-signed yet.
           </div>
-          <p style="color:#64748b;font-size:14px;margin:20px 0 0">If the button does not work, copy this link:<br><a href="${downloadUrl}" style="color:#0f766e">${downloadUrl}</a></p>
+          <p style="color:#64748b;font-size:14px;margin:20px 0 0">If the button does not work, copy this link:<br><a href="${trackedDownloadUrl}" style="color:#0f766e">${trackedDownloadUrl}</a></p>
+          <p style="color:#64748b;font-size:13px;margin:12px 0 0">Direct GitHub link:<br><a href="${downloadUrl}" style="color:#0f766e">${downloadUrl}</a></p>
           <p style="color:#64748b;font-size:14px;margin:14px 0 0">Install guide:<br><a href="${installUrl}" style="color:#0f766e">${installUrl}</a></p>
           <p style="color:#64748b;font-size:13px;margin:22px 0 0">Need help? Reply to this email or contact support@useflowbridge.com.</p>
           </div>

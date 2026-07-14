@@ -16,6 +16,8 @@ const refreshAnalytics = document.querySelector("#refreshAnalytics");
 const analyticsTotal = document.querySelector("#analyticsTotal");
 const analyticsCountries = document.querySelector("#analyticsCountries");
 const analyticsBeta = document.querySelector("#analyticsBeta");
+const analyticsInstall = document.querySelector("#analyticsInstall");
+const analyticsDownloads = document.querySelector("#analyticsDownloads");
 const analyticsRows = document.querySelector("#analyticsRows");
 const refreshWaitlist = document.querySelector("#refreshWaitlist");
 const copyWaitlistEmails = document.querySelector("#copyWaitlistEmails");
@@ -183,10 +185,14 @@ async function loadAnalytics() {
   const rows = data || [];
   const countries = new Set(rows.map((row) => row.country).filter(Boolean));
   const betaVisits = rows.filter((row) => row.page === "/beta" || row.page.endsWith("/beta")).length;
+  const installViews = rows.filter((row) => row.page === "/install" || row.page.endsWith("/install")).length;
+  const downloads = rows.filter((row) => row.page === "/download" || row.page.endsWith("/download")).length;
 
   analyticsTotal.textContent = String(rows.length);
   analyticsCountries.textContent = String(countries.size);
   analyticsBeta.textContent = String(betaVisits);
+  analyticsInstall.textContent = String(installViews);
+  analyticsDownloads.textContent = String(downloads);
 
   if (!rows.length) {
     analyticsRows.innerHTML = '<tr><td colspan="4">No visits yet.</td></tr>';

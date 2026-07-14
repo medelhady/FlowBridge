@@ -33,6 +33,10 @@
     {
       "source": "/install",
       "destination": "/install.html"
+    },
+    {
+      "source": "/download",
+      "destination": "/download.html"
     }
   ]
 }
