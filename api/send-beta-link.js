@@ -38,9 +38,12 @@ async function sendEmail(email) {
     throw new Error("Missing RESEND_API_KEY");
   }
 
-  const downloadUrl = process.env.FLOWBRIDGE_BETA_DOWNLOAD_URL
+  const downloadUrl = process.env.BETA_DOWNLOAD_URL
+    || process.env.FLOWBRIDGE_BETA_DOWNLOAD_URL
     || "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip";
-  const fromEmail = process.env.FLOWBRIDGE_FROM_EMAIL || "FlowBridge <onboarding@resend.dev>";
+  const fromEmail = process.env.FROM_EMAIL
+    || process.env.FLOWBRIDGE_FROM_EMAIL
+    || "FlowBridge <support@useflowbridge.com>";
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -51,17 +54,23 @@ async function sendEmail(email) {
     body: JSON.stringify({
       from: fromEmail,
       to: email,
+      reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge beta link",
+      text: `Your FlowBridge beta is ready.\n\nDownload it here:\n${downloadUrl}\n\nThanks for helping test FlowBridge.\n\nFlowBridge Support\nsupport@useflowbridge.com`,
       html: `
-        <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:560px;margin:auto;padding:28px">
-          <h1 style="font-size:24px;margin:0 0 12px">Your FlowBridge beta is ready</h1>
-          <p>Thanks for helping test FlowBridge. Your feedback will shape the public launch.</p>
+        <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
+          <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
+          <p style="margin:0 0 8px;color:#2563eb;font-size:12px;font-weight:800;text-transform:uppercase">FlowBridge private beta</p>
+          <h1 style="font-size:26px;line-height:1.1;margin:0 0 14px;color:#07111f">Your beta download is ready</h1>
+          <p style="margin:0 0 18px">Thanks for helping test FlowBridge. Your honest feedback will shape the public launch.</p>
           <p>
             <a href="${downloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
               Download FlowBridge Beta
             </a>
           </p>
-          <p style="color:#64748b;font-size:14px">If the button does not work, copy this link:<br>${downloadUrl}</p>
+          <p style="color:#64748b;font-size:14px;margin:20px 0 0">If the button does not work, copy this link:<br><a href="${downloadUrl}" style="color:#0f766e">${downloadUrl}</a></p>
+          <p style="color:#64748b;font-size:13px;margin:22px 0 0">Need help? Reply to this email or contact support@useflowbridge.com.</p>
+          </div>
         </div>
       `,
     }),
@@ -109,8 +118,13 @@ module.exports = async function handler(request, response) {
     }
 
     await saveWaitlistEmail(email, "pending");
-    await sendEmail(email);
-    await saveWaitlistEmail(email, "sent", new Date().toISOString());
+    try {
+      await sendEmail(email);
+      await saveWaitlistEmail(email, "sent", new Date().toISOString());
+    } catch (emailError) {
+      await saveWaitlistEmail(email, "failed");
+      throw emailError;
+    }
 
     send(response, { ok: true });
   } catch (error) {

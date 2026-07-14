@@ -8,10 +8,10 @@ Your Resend API key.
 SUPABASE_SERVICE_ROLE_KEY
 Your Supabase service role key. Keep it secret.
 
-FLOWBRIDGE_BETA_DOWNLOAD_URL
+BETA_DOWNLOAD_URL
 https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip
 
-FLOWBRIDGE_FROM_EMAIL
+FROM_EMAIL
 FlowBridge <support@useflowbridge.com>
 
 Important:

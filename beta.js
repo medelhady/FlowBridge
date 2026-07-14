@@ -60,7 +60,7 @@ betaForm.addEventListener("submit", async (event) => {
 
   betaSubmit.disabled = true;
   betaSubmit.textContent = "Sending...";
-  betaMessage.textContent = "Preparing your beta link...";
+  betaMessage.textContent = "Preparing your private beta link...";
 
   try {
     const response = await fetch("/api/send-beta-link", {
@@ -78,9 +78,9 @@ betaForm.addEventListener("submit", async (event) => {
     }
 
     betaForm.reset();
-    betaMessage.textContent = "Done. Check your email for the beta download link.";
+    betaMessage.textContent = "Done. Check your inbox for the FlowBridge beta download link.";
   } catch (error) {
-    betaMessage.textContent = "Saved, but email delivery is not ready yet. We will send the link soon.";
+    betaMessage.textContent = "Your email is saved. Delivery needs a quick check, and we will send the link soon.";
   } finally {
     betaSubmit.disabled = false;
     betaSubmit.textContent = "Send me the beta link";
