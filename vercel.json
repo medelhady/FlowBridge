@@ -29,6 +29,10 @@
     {
       "source": "/terms-of-service",
       "destination": "/terms-of-service.html"
+    },
+    {
+      "source": "/install",
+      "destination": "/install.html"
     }
   ]
 }

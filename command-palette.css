@@ -1714,3 +1714,116 @@ h3 {
   font-size: 14px;
 }
 
+.install-page {
+  min-height: 100vh;
+}
+
+.install-hero {
+  width: min(940px, calc(100% - 40px));
+  margin: 72px auto 28px;
+  text-align: center;
+}
+
+.install-hero h1 {
+  margin: 0 auto 18px;
+  max-width: 820px;
+  color: #07111f;
+  font-size: clamp(42px, 7vw, 86px);
+  line-height: 0.95;
+}
+
+.install-hero p {
+  max-width: 680px;
+  margin: 0 auto;
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.install-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto 26px;
+}
+
+.install-steps article,
+.install-help {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 55px rgba(15, 23, 42, 0.08);
+}
+
+.install-steps article {
+  min-height: 210px;
+  padding: 22px;
+}
+
+.install-steps span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 28px;
+  border-radius: 14px;
+  color: #042f2e;
+  font-weight: 950;
+  background: linear-gradient(135deg, #67e8f9, #86efac);
+}
+
+.install-steps h2,
+.install-help h2 {
+  margin: 0 0 10px;
+  color: #07111f;
+  font-size: 22px;
+  line-height: 1.05;
+}
+
+.install-steps p,
+.install-help p {
+  margin: 0;
+  color: rgba(15, 23, 42, 0.68);
+  line-height: 1.6;
+}
+
+.install-steps code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: #0f766e;
+  background: rgba(20, 184, 166, 0.1);
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.install-steps .warning-step {
+  border-color: rgba(37, 99, 235, 0.18);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(240, 253, 250, 0.82));
+}
+
+.install-steps .warning-step span {
+  color: #075985;
+  background: linear-gradient(135deg, #bfdbfe, #67e8f9);
+}
+
+.install-help {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto 80px;
+  padding: 24px;
+}
+
+.install-help a {
+  color: #0f766e;
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .install-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .install-steps article {
+    min-height: auto;
+  }
+}
+

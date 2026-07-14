@@ -210,6 +210,26 @@ h1 {
   line-height: 1.55;
 }
 
+.beta-install-note {
+  padding: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.24);
+  border-radius: 10px;
+  color: #cbd5e1;
+  background: rgba(14, 165, 233, 0.08);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.beta-install-note strong,
+.beta-install-note b {
+  color: #fff;
+}
+
+.beta-install-note a {
+  color: #67e8f9;
+  font-weight: 900;
+}
+
 .waitlist-card label {
   display: grid;
   gap: 7px;
