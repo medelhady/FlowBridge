@@ -127,6 +127,8 @@ function renderPreview() {
 }
 
 function showTab(tabId) {
+  document.body.classList.toggle("wide-admin-panel", tabId === "analytics" || tabId === "waitlist");
+
   tabs.forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === tabId);
   });

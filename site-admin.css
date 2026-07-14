@@ -221,6 +221,14 @@
   align-items: start;
 }
 
+.wide-admin-panel .admin-workspace {
+  grid-template-columns: 1fr;
+}
+
+.wide-admin-panel .live-preview {
+  display: none;
+}
+
 .admin-panel,
 .live-preview {
   border: 1px solid var(--line);
