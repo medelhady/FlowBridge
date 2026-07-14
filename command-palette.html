@@ -190,7 +190,7 @@
                   <li>Approval before running commands</li>
                   <li>Windows beta access</li>
                 </ul>
-                <button class="primary-btn plan-select" type="button" data-plan="solo">Start Solo</button>
+                <button class="primary-btn plan-select checkout-button" type="button" data-plan="solo">Start Solo</button>
               </article>
 
               <article class="plan terminal-plan" data-plan="duo">
@@ -209,7 +209,7 @@
                   <li>Priority support</li>
                   <li>Early access to sync features</li>
                 </ul>
-                <button class="secondary-btn plan-select" type="button" data-plan="duo">Start Duo</button>
+                <button class="secondary-btn plan-select checkout-button" type="button" data-plan="duo">Start Duo</button>
               </article>
             </div>
           </div>
@@ -237,7 +237,7 @@
               <i></i>
               <span>Fix back</span>
             </div>
-            <a class="primary-btn" href="#">Start 7-day free trial</a>
+            <button class="primary-btn checkout-button" type="button" id="checkoutSelectedPlan">Start 7-day free trial</button>
           </div>
         </div>
       </section>
@@ -296,10 +296,13 @@
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
     <script src="./supabase-config.js"></script>
     <script src="./supabase-db.js"></script>
+    <script src="./paddle-config.js"></script>
     <script src="./site-settings.js"></script>
     <script src="./command-palette.js"></script>
+    <script src="./paddle-checkout.js"></script>
     <script src="./support-compose.js"></script>
     <script src="./analytics.js"></script>
   </body>

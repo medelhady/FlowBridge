@@ -18,6 +18,7 @@ const lifetimeCopy = document.querySelector(".lifetime-offer p");
 let billing = "monthly";
 let selectedPlan = "solo";
 let settings = window.FLOWBRIDGE_SITE_SETTINGS || {};
+window.flowbridgePricingState = { billing, selectedPlan };
 
 let planDetails = {
   solo: {
@@ -87,6 +88,8 @@ function applySiteSettings(nextSettings) {
 }
 
 function refreshPricing() {
+  window.flowbridgePricingState = { billing, selectedPlan };
+
   document.querySelectorAll("[data-monthly][data-yearly]").forEach((node) => {
     node.textContent = node.dataset[billing];
   });
