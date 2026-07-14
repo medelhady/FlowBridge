@@ -167,7 +167,7 @@ async function sendPurchaseEmail(email) {
   }
 }
 
-module.exports = async function handler(request, response) {
+async function handler(request, response) {
   if (request.method !== "POST") {
     send(response, { error: "Method not allowed" }, 405);
     return;
@@ -230,4 +230,11 @@ module.exports = async function handler(request, response) {
     });
     send(response, { error: error.message || "Webhook failed" }, 400);
   }
+}
+
+module.exports = handler;
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
 };
