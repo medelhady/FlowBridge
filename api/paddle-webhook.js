@@ -66,6 +66,36 @@ function findCustomerEmail(event) {
   ].find(Boolean);
 }
 
+function findCustomerId(event) {
+  const data = event && event.data ? event.data : {};
+  return [
+    data.customer_id,
+    data.customer && data.customer.id,
+    data.customer && data.customer.customer_id,
+  ].find(Boolean);
+}
+
+async function fetchCustomerEmail(customerId) {
+  const paddleKey = process.env.PADDLE_API_KEY;
+  if (!customerId || !paddleKey) {
+    return null;
+  }
+
+  const response = await fetch(`https://api.paddle.com/customers/${customerId}`, {
+    headers: {
+      Authorization: `Bearer ${paddleKey}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Could not fetch Paddle customer: ${await response.text()}`);
+  }
+
+  const payload = await response.json();
+  return payload && payload.data ? payload.data.email : null;
+}
+
 async function sendPurchaseEmail(email) {
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
@@ -140,9 +170,13 @@ module.exports = async function handler(request, response) {
       return;
     }
 
-    const email = findCustomerEmail(event);
+    let email = findCustomerEmail(event);
     if (!email) {
-      send(response, { ok: true, skipped: "customer email not found in webhook payload" });
+      email = await fetchCustomerEmail(findCustomerId(event));
+    }
+
+    if (!email) {
+      send(response, { ok: true, skipped: "customer email not found" });
       return;
     }
 

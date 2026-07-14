@@ -23,6 +23,9 @@ FlowBridge <support@useflowbridge.com>
 PADDLE_WEBHOOK_SECRET
 Copy this from Paddle after creating the webhook endpoint.
 
+PADDLE_API_KEY
+Create this in Paddle. The webhook uses it only if Paddle sends customer_id without the email.
+
 Paddle webhook endpoint:
 https://useflowbridge.com/api/paddle-webhook
 
