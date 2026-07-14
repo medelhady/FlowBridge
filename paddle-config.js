@@ -2,7 +2,7 @@ window.FLOWBRIDGE_PADDLE = {
   // Replace this with your Paddle live client-side token.
   // Paddle dashboard: Developer tools -> Authentication -> Client-side tokens.
   clientToken: "live_1be7eb03e753c48617d882fd020",
-  successUrl: "https://useflowbridge.com/success",
+  successUrl: "",
   prices: {
     solo: {
       monthly: "pri_01kxg9hparr886d3qk06cmt1pz",

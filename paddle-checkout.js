@@ -27,6 +27,7 @@
 
   function openCheckout(plan, billing) {
     const priceId = getPriceId(plan, billing);
+    const successUrl = config.successUrl || new URL("/success", window.location.origin).toString();
 
     if (!priceId) {
       alert("Checkout is not ready for this plan yet.");
@@ -46,7 +47,7 @@
         },
       ],
       settings: {
-        successUrl: config.successUrl || "https://useflowbridge.com/success",
+        successUrl,
       },
     });
   }

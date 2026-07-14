@@ -9,10 +9,28 @@ SUPABASE_SERVICE_ROLE_KEY
 Your Supabase service role key. Keep it secret.
 
 BETA_DOWNLOAD_URL
-https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip
+https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.1-native-launcher.zip
+
+TRACKED_DOWNLOAD_URL
+https://useflowbridge.com/download
+
+INSTALL_GUIDE_URL
+https://useflowbridge.com/install
 
 FROM_EMAIL
 FlowBridge <support@useflowbridge.com>
+
+PADDLE_WEBHOOK_SECRET
+Copy this from Paddle after creating the webhook endpoint.
+
+Paddle webhook endpoint:
+https://useflowbridge.com/api/paddle-webhook
+
+Recommended Paddle events:
+transaction.completed
+transaction.paid
+subscription.created
+subscription.activated
 
 Important:
 Use a verified domain in Resend before using support@useflowbridge.com.

@@ -1,0 +1,154 @@
+const crypto = require("crypto");
+
+function send(response, payload, status = 200) {
+  response.setHeader("Content-Type", "application/json");
+  response.status(status).send(JSON.stringify(payload));
+}
+
+function readRawBody(request) {
+  return new Promise((resolve, reject) => {
+    if (typeof request.body === "string") {
+      resolve(request.body);
+      return;
+    }
+
+    const chunks = [];
+    request.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    request.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    request.on("error", reject);
+  });
+}
+
+function parseSignature(header) {
+  return String(header || "")
+    .split(";")
+    .reduce((parts, item) => {
+      const [key, value] = item.split("=");
+      if (key && value) parts[key.trim()] = value.trim();
+      return parts;
+    }, {});
+}
+
+function verifyPaddleSignature(rawBody, signatureHeader) {
+  const secret = process.env.PADDLE_WEBHOOK_SECRET;
+  if (!secret) {
+    throw new Error("Missing PADDLE_WEBHOOK_SECRET");
+  }
+
+  const signature = parseSignature(signatureHeader);
+  if (!signature.ts || !signature.h1) {
+    throw new Error("Missing Paddle signature");
+  }
+
+  const signedPayload = `${signature.ts}:${rawBody}`;
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(signedPayload)
+    .digest("hex");
+
+  const received = Buffer.from(signature.h1, "hex");
+  const calculated = Buffer.from(expected, "hex");
+
+  if (received.length !== calculated.length || !crypto.timingSafeEqual(received, calculated)) {
+    throw new Error("Invalid Paddle signature");
+  }
+}
+
+function findCustomerEmail(event) {
+  const data = event && event.data ? event.data : {};
+  return [
+    data.customer && data.customer.email,
+    data.customer && data.customer.email_address,
+    data.customer_email,
+    data.email,
+    data.checkout && data.checkout.customer && data.checkout.customer.email,
+    data.custom_data && data.custom_data.email,
+  ].find(Boolean);
+}
+
+async function sendPurchaseEmail(email) {
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    throw new Error("Missing RESEND_API_KEY");
+  }
+
+  const trackedDownloadUrl = process.env.TRACKED_DOWNLOAD_URL || "https://useflowbridge.com/download";
+  const installUrl = process.env.INSTALL_GUIDE_URL || "https://useflowbridge.com/install";
+  const fromEmail = process.env.FROM_EMAIL || "FlowBridge <support@useflowbridge.com>";
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: fromEmail,
+      to: email,
+      reply_to: "support@useflowbridge.com",
+      subject: "Your FlowBridge download is ready",
+      text: `Welcome to FlowBridge.\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nWindows may show SmartScreen because this beta is not code-signed yet. Click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      html: `
+        <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
+          <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
+            <p style="margin:0 0 8px;color:#2563eb;font-size:12px;font-weight:800;text-transform:uppercase">FlowBridge access</p>
+            <h1 style="font-size:26px;line-height:1.1;margin:0 0 14px;color:#07111f">Your FlowBridge download is ready</h1>
+            <p style="margin:0 0 18px">Thanks for joining FlowBridge. Start with the download, then follow the short install guide.</p>
+            <p>
+              <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
+                Download FlowBridge
+              </a>
+              <a href="${installUrl}" style="display:inline-block;margin-left:8px;background:#e0f2fe;color:#075985;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
+                How to install
+              </a>
+            </p>
+            <div style="margin:18px 0 0;padding:14px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;color:#0f172a;font-size:14px">
+              <strong>Windows note:</strong> If SmartScreen appears, click <strong>More info</strong>, then <strong>Run anyway</strong>. This happens because the beta is not code-signed yet.
+            </div>
+            <p style="color:#64748b;font-size:13px;margin:22px 0 0">Need help? Reply to this email or contact support@useflowbridge.com.</p>
+          </div>
+        </div>
+      `,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+}
+
+module.exports = async function handler(request, response) {
+  if (request.method !== "POST") {
+    send(response, { error: "Method not allowed" }, 405);
+    return;
+  }
+
+  try {
+    const rawBody = await readRawBody(request);
+    verifyPaddleSignature(rawBody, request.headers["paddle-signature"]);
+
+    const event = JSON.parse(rawBody || "{}");
+    const allowedEvents = new Set([
+      "transaction.completed",
+      "transaction.paid",
+      "subscription.created",
+      "subscription.activated",
+    ]);
+
+    if (!allowedEvents.has(event.event_type)) {
+      send(response, { ok: true, ignored: event.event_type || "unknown" });
+      return;
+    }
+
+    const email = findCustomerEmail(event);
+    if (!email) {
+      send(response, { ok: true, skipped: "customer email not found in webhook payload" });
+      return;
+    }
+
+    await sendPurchaseEmail(String(email).trim().toLowerCase());
+    send(response, { ok: true });
+  } catch (error) {
+    send(response, { error: error.message || "Webhook failed" }, 400);
+  }
+};
