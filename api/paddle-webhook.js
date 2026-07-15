@@ -137,7 +137,7 @@ async function sendPurchaseEmail(email) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge download is ready",
-      text: `Welcome to FlowBridge.\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nWindows may show SmartScreen because this beta is not code-signed yet. Click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      text: `Welcome to FlowBridge.\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this beta installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
@@ -153,7 +153,7 @@ async function sendPurchaseEmail(email) {
               </a>
             </p>
             <div style="margin:18px 0 0;padding:14px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;color:#0f172a;font-size:14px">
-              <strong>Windows note:</strong> If SmartScreen appears, click <strong>More info</strong>, then <strong>Run anyway</strong>. This happens because the beta is not code-signed yet.
+              <strong>Install note:</strong> After download, extract the ZIP and open <strong>Install FlowBridge.bat</strong>. If Windows shows <strong>Unknown Publisher</strong>, click <strong>Run</strong>. If SmartScreen appears instead, click <strong>More info</strong>, then <strong>Run anyway</strong>.
             </div>
             <p style="color:#64748b;font-size:13px;margin:22px 0 0">Need help? Reply to this email or contact support@useflowbridge.com.</p>
           </div>

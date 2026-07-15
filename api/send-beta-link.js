@@ -58,13 +58,13 @@ async function sendEmail(email) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge beta link",
-      text: `Your FlowBridge beta is ready.\n\nDownload it here:\n${trackedDownloadUrl}\n\nInstallation guide:\n${installUrl}\n\nDirect download link:\n${downloadUrl}\n\nWindows may show SmartScreen because this beta is not code-signed yet. Click More info, then Run anyway.\n\nThanks for helping test FlowBridge.\n\nFlowBridge Support\nsupport@useflowbridge.com`,
+      text: `Your FlowBridge beta is ready.\n\nYour beta access is valid for 14 days from the first time FlowBridge runs in VS Code.\n\nDownload it here:\n${trackedDownloadUrl}\n\nInstallation guide:\n${installUrl}\n\nDirect download link:\n${downloadUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this beta installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nThanks for helping test FlowBridge.\n\nFlowBridge Support\nsupport@useflowbridge.com`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
           <p style="margin:0 0 8px;color:#2563eb;font-size:12px;font-weight:800;text-transform:uppercase">FlowBridge private beta</p>
           <h1 style="font-size:26px;line-height:1.1;margin:0 0 14px;color:#07111f">Your beta download is ready</h1>
-          <p style="margin:0 0 18px">Thanks for helping test FlowBridge. Your honest feedback will shape the public launch.</p>
+          <p style="margin:0 0 18px">Thanks for helping test FlowBridge. Your beta access is valid for <strong>14 days</strong> from the first time FlowBridge runs in VS Code.</p>
           <p>
             <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
               Download FlowBridge Beta
@@ -74,7 +74,7 @@ async function sendEmail(email) {
             </a>
           </p>
           <div style="margin:18px 0 0;padding:14px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;color:#0f172a;font-size:14px">
-            <strong>Windows note:</strong> If SmartScreen appears, click <strong>More info</strong>, then <strong>Run anyway</strong>. This happens because the beta is not code-signed yet.
+            <strong>Install note:</strong> After download, extract the ZIP and open <strong>Install FlowBridge.bat</strong>. If Windows shows <strong>Unknown Publisher</strong>, click <strong>Run</strong>. If SmartScreen appears instead, click <strong>More info</strong>, then <strong>Run anyway</strong>.
           </div>
           <p style="color:#64748b;font-size:14px;margin:20px 0 0">If the button does not work, copy this link:<br><a href="${trackedDownloadUrl}" style="color:#0f766e">${trackedDownloadUrl}</a></p>
           <p style="color:#64748b;font-size:13px;margin:12px 0 0">Direct GitHub link:<br><a href="${downloadUrl}" style="color:#0f766e">${downloadUrl}</a></p>
