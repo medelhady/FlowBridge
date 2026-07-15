@@ -24,7 +24,7 @@
         <p class="eyebrow">Windows beta setup</p>
         <h1>Install FlowBridge in a few simple steps.</h1>
         <p>
-          FlowBridge has two parts: the desktop bridge app and the browser
+          FlowBridge has two parts: the VS Code terminal bridge and the browser
           extension. Install both once, then use the Bridge button inside your
           AI chats.
         </p>
@@ -39,27 +39,32 @@
         <article>
           <span>2</span>
           <h2>Run FlowBridge setup</h2>
-          <p>Open the setup file inside the extracted folder.</p>
+          <p>Open the extracted folder and double-click <strong>Install FlowBridge.bat</strong>. This installs the VS Code bridge and opens the Chrome extensions page.</p>
         </article>
         <article class="warning-step">
           <span>!</span>
-          <h2>If Windows SmartScreen appears</h2>
-          <p>Click <strong>More info</strong>, then click <strong>Run anyway</strong>. This beta is not code-signed yet.</p>
+          <h2>If Windows shows a security warning</h2>
+          <p>Click <strong>Run</strong>. Windows may show <strong>Unknown Publisher</strong> because this beta installer is not code-signed yet.</p>
         </article>
         <article>
           <span>3</span>
           <h2>Add the extension to Chrome</h2>
-          <p>Open <code>chrome://extensions</code>, turn on <strong>Developer mode</strong>, click <strong>Load unpacked</strong>, then choose the <strong>extension</strong> folder.</p>
+          <p>Open <code>chrome://extensions</code>, turn on <strong>Developer mode</strong>, click <strong>Load unpacked</strong>, then choose the <strong>browser-extension</strong> folder.</p>
         </article>
         <article>
           <span>4</span>
+          <h2>Check VS Code</h2>
+          <p>Open VS Code and make sure the bottom bar shows <strong>FlowBridge: On</strong>. The beta access lasts 14 days from first run.</p>
+        </article>
+        <article>
+          <span>5</span>
           <h2>Open an AI chat</h2>
           <p>Go to ChatGPT, Claude, Gemini, or Grok. Code blocks should show the FlowBridge button.</p>
         </article>
         <article>
-          <span>5</span>
+          <span>6</span>
           <h2>Test one command</h2>
-          <p>Click the Bridge button, approve the command, then check that the terminal output returns correctly.</p>
+          <p>Click the Bridge button, approve the command inside VS Code, then check that the terminal output returns correctly.</p>
         </article>
       </section>
 
