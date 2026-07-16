@@ -10,6 +10,7 @@ create table if not exists public.license_keys (
   plan text not null default 'solo',
   billing text not null default 'unknown',
   device_limit integer not null default 1,
+  trial_days integer not null default 7,
   active boolean not null default true,
   notes text
 );

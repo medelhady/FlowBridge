@@ -10,6 +10,8 @@ const PRICE_PLANS = {
   pri_01kxgdw20df49am0jrmv33s6fd: { plan: "duo", billing: "yearly", devices: 2 },
 };
 
+const TRIAL_DAYS = 7;
+
 function send(response, payload, status = 200) {
   response.setHeader("Content-Type", "application/json");
   response.status(status).send(JSON.stringify(payload));
@@ -161,6 +163,7 @@ async function createLicense(email, customerId, transactionId, planInfo) {
     plan: planInfo.plan,
     billing: planInfo.billing,
     device_limit: planInfo.devices,
+    trial_days: TRIAL_DAYS,
     active: true,
   };
 
@@ -199,6 +202,60 @@ async function createLicense(email, customerId, transactionId, planInfo) {
 
   const rows = await response.json();
   return rows[0] || payload;
+}
+
+async function findExistingLicense(customerId, email) {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey || (!customerId && !email)) {
+    return null;
+  }
+
+  async function lookup(field, value) {
+    if (!value) return null;
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}?${field}=eq.${encodeURIComponent(value)}&select=license_key,email,plan,billing,device_limit,active&limit=1`,
+      {
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) return null;
+
+    const rows = await response.json();
+    return rows[0] || null;
+  }
+
+  return await lookup("customer_id", customerId) || await lookup("email", email);
+}
+
+async function deactivateLicenses(customerId, email, reason) {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey || (!customerId && !email)) {
+    return;
+  }
+
+  const filters = customerId
+    ? `customer_id=eq.${encodeURIComponent(customerId)}`
+    : `email=eq.${encodeURIComponent(email)}`;
+
+  await fetch(`${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}?${filters}`, {
+    method: "PATCH",
+    headers: {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify({
+      active: false,
+      notes: reason || "Subscription inactive",
+    }),
+  });
 }
 
 async function fetchCustomerEmail(customerId) {
@@ -243,7 +300,7 @@ async function sendPurchaseEmail(email, license) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge download is ready",
-      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${license.plan || "solo"}\nDevices: ${license.device_limit || 1}\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this beta installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${license.plan || "solo"}\nDevices: ${license.device_limit || 1}\nFree trial: ${TRIAL_DAYS} days\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
@@ -253,7 +310,7 @@ async function sendPurchaseEmail(email, license) {
             <div style="margin:0 0 18px;padding:14px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa">
               <p style="margin:0 0 6px;color:#0f766e;font-size:12px;font-weight:800;text-transform:uppercase">Your license key</p>
               <p style="margin:0;font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;letter-spacing:.04em;color:#07111f">${license.license_key}</p>
-              <p style="margin:8px 0 0;color:#475569;font-size:13px">${license.plan || "Solo"} plan · ${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""}</p>
+              <p style="margin:8px 0 0;color:#475569;font-size:13px">${license.plan || "Solo"} plan · ${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""} · ${TRIAL_DAYS}-day free trial</p>
             </div>
             <p>
               <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
@@ -298,6 +355,31 @@ async function handler(request, response) {
       "subscription.activated",
     ]);
 
+    const inactiveEvents = new Set([
+      "subscription.canceled",
+      "subscription.paused",
+      "subscription.past_due",
+    ]);
+
+    let email = findCustomerEmail(event);
+    if (!email && customerId) {
+      email = await fetchCustomerEmail(customerId);
+    }
+
+    if (inactiveEvents.has(eventType)) {
+      const normalizedEmail = email ? String(email).trim().toLowerCase() : null;
+      await deactivateLicenses(customerId, normalizedEmail, `Paddle event: ${eventType}`);
+      await saveWebhookLog({
+        status: "updated",
+        event_type: eventType,
+        customer_id: customerId,
+        email: normalizedEmail,
+        message: "License deactivated",
+      });
+      send(response, { ok: true, deactivated: true });
+      return;
+    }
+
     if (!allowedEvents.has(eventType)) {
       await saveWebhookLog({
         status: "ignored",
@@ -307,11 +389,6 @@ async function handler(request, response) {
       });
       send(response, { ok: true, ignored: eventType });
       return;
-    }
-
-    let email = findCustomerEmail(event);
-    if (!email) {
-      email = await fetchCustomerEmail(customerId);
     }
 
     if (!email) {
@@ -328,6 +405,20 @@ async function handler(request, response) {
     const normalizedEmail = String(email).trim().toLowerCase();
     const planInfo = findPurchasedPlan(event);
     const transactionId = findTransactionId(event) || null;
+
+    const existingLicense = await findExistingLicense(customerId, normalizedEmail);
+    if (existingLicense) {
+      await saveWebhookLog({
+        status: "already_sent",
+        event_type: eventType,
+        customer_id: customerId,
+        email: normalizedEmail,
+        message: `License already exists: ${existingLicense.license_key}`,
+      });
+      send(response, { ok: true, already_has_license: true });
+      return;
+    }
+
     const license = await createLicense(normalizedEmail, customerId, transactionId, planInfo);
 
     await sendPurchaseEmail(normalizedEmail, license);
