@@ -167,16 +167,35 @@ async function createLicense(email, customerId, transactionId, planInfo) {
     active: true,
   };
 
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}`, {
-    method: "POST",
-    headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
-      "Content-Type": "application/json",
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify(payload),
-  });
+  async function insertLicense(insertPayload) {
+    return await fetch(`${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}`, {
+      method: "POST",
+      headers: {
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(insertPayload),
+    });
+  }
+
+  let response = await insertLicense(payload);
+
+  if (!response.ok) {
+    const message = await response.text();
+
+    if (message.includes("trial_days")) {
+      const fallbackPayload = { ...payload };
+      delete fallbackPayload.trial_days;
+      response = await insertLicense(fallbackPayload);
+    } else {
+      response = {
+        ok: false,
+        text: async () => message,
+      };
+    }
+  }
 
   if (!response.ok) {
     const message = await response.text();
