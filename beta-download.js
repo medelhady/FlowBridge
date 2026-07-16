@@ -1,4 +1,4 @@
-const fallbackDownloadUrl = "https://github.com/medelhady/FlowBridge/releases/download/paid-v1/FlowBridge-Paid-v1.zip";
+const fallbackDownloadUrl = "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.1-native-launcher.zip";
 const directDownload = document.querySelector("#directDownload");
 
 if (directDownload) {
@@ -15,7 +15,7 @@ async function trackDownloadClick() {
 
   await window.flowbridgeDb.from("visitor_events").insert({
     session_id: sessionId,
-    page: "/download",
+    page: "/beta-download",
     url: location.href,
     referrer: document.referrer || null,
     language: navigator.language,

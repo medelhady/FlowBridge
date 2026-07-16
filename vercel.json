@@ -39,6 +39,10 @@
       "destination": "/download.html"
     },
     {
+      "source": "/beta-download",
+      "destination": "/beta-download.html"
+    },
+    {
       "source": "/success",
       "destination": "/success.html"
     }

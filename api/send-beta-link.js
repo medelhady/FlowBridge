@@ -40,9 +40,9 @@ async function sendEmail(email) {
 
   const downloadUrl = process.env.BETA_DOWNLOAD_URL
     || process.env.FLOWBRIDGE_BETA_DOWNLOAD_URL
-    || "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip";
+    || "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.1-native-launcher.zip";
   const installUrl = process.env.INSTALL_GUIDE_URL || "https://useflowbridge.com/install";
-  const trackedDownloadUrl = process.env.TRACKED_DOWNLOAD_URL || "https://useflowbridge.com/download";
+  const trackedDownloadUrl = process.env.BETA_TRACKED_DOWNLOAD_URL || "https://useflowbridge.com/beta-download";
   const fromEmail = process.env.FROM_EMAIL
     || process.env.FLOWBRIDGE_FROM_EMAIL
     || "FlowBridge <support@useflowbridge.com>";
