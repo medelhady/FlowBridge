@@ -1,6 +1,14 @@
 const crypto = require("crypto");
 const SUPABASE_URL = "https://sztjlrowzagweqwhvgpm.supabase.co";
 const WEBHOOK_LOGS_TABLE = "paddle_webhook_logs";
+const LICENSES_TABLE = "license_keys";
+
+const PRICE_PLANS = {
+  pri_01kxg9hparr886d3qk06cmt1pz: { plan: "solo", billing: "monthly", devices: 1 },
+  pri_01kxgdasy6ttq8tjh3g084c699: { plan: "solo", billing: "yearly", devices: 1 },
+  pri_01kxgdtfrz4dkcmtex46s19p6w: { plan: "duo", billing: "monthly", devices: 2 },
+  pri_01kxgdw20df49am0jrmv33s6fd: { plan: "duo", billing: "yearly", devices: 2 },
+};
 
 function send(response, payload, status = 200) {
   response.setHeader("Content-Type", "application/json");
@@ -77,6 +85,48 @@ function findCustomerId(event) {
   ].find(Boolean);
 }
 
+function findTransactionId(event) {
+  const data = event && event.data ? event.data : {};
+  return [
+    data.id,
+    data.transaction_id,
+    data.checkout && data.checkout.transaction_id,
+  ].find(Boolean);
+}
+
+function findPurchasedPlan(event) {
+  const data = event && event.data ? event.data : {};
+  const priceIds = [];
+  const items = data.items || data.details && data.details.line_items || [];
+
+  if (Array.isArray(items)) {
+    items.forEach((item) => {
+      const priceId = item.price_id || item.price && item.price.id;
+      if (priceId) priceIds.push(priceId);
+    });
+  }
+
+  const directPriceId = data.price_id || data.custom_data && data.custom_data.price_id;
+  if (directPriceId) priceIds.push(directPriceId);
+
+  const matchedPriceId = priceIds.find((priceId) => PRICE_PLANS[priceId]);
+  return matchedPriceId
+    ? { priceId: matchedPriceId, ...PRICE_PLANS[matchedPriceId] }
+    : { priceId: priceIds[0] || null, plan: "solo", billing: "unknown", devices: 1 };
+}
+
+function generateLicenseKey() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = crypto.randomBytes(20);
+  let raw = "";
+
+  for (let index = 0; index < 20; index += 1) {
+    raw += alphabet[bytes[index] % alphabet.length];
+  }
+
+  return `FB-${raw.match(/.{1,4}/g).join("-")}`;
+}
+
 async function saveWebhookLog(payload) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceKey) {
@@ -93,6 +143,62 @@ async function saveWebhookLog(payload) {
     },
     body: JSON.stringify(payload),
   }).catch(() => {});
+}
+
+async function createLicense(email, customerId, transactionId, planInfo) {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey) {
+    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
+  }
+
+  const licenseKey = generateLicenseKey();
+  const payload = {
+    license_key: licenseKey,
+    email,
+    customer_id: customerId,
+    transaction_id: transactionId,
+    price_id: planInfo.priceId,
+    plan: planInfo.plan,
+    billing: planInfo.billing,
+    device_limit: planInfo.devices,
+    active: true,
+  };
+
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}`, {
+    method: "POST",
+    headers: {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    if (message.includes("duplicate") && transactionId) {
+      const existing = await fetch(
+        `${SUPABASE_URL}/rest/v1/${LICENSES_TABLE}?transaction_id=eq.${encodeURIComponent(transactionId)}&select=license_key,plan,billing,device_limit&limit=1`,
+        {
+          headers: {
+            apikey: serviceKey,
+            Authorization: `Bearer ${serviceKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const rows = existing.ok ? await existing.json() : [];
+      if (rows[0] && rows[0].license_key) {
+        return rows[0];
+      }
+    }
+
+    throw new Error(`Could not create license: ${message}`);
+  }
+
+  const rows = await response.json();
+  return rows[0] || payload;
 }
 
 async function fetchCustomerEmail(customerId) {
@@ -116,7 +222,7 @@ async function fetchCustomerEmail(customerId) {
   return payload && payload.data ? payload.data.email : null;
 }
 
-async function sendPurchaseEmail(email) {
+async function sendPurchaseEmail(email, license) {
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
     throw new Error("Missing RESEND_API_KEY");
@@ -137,13 +243,18 @@ async function sendPurchaseEmail(email) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge download is ready",
-      text: `Welcome to FlowBridge.\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this beta installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${license.plan || "solo"}\nDevices: ${license.device_limit || 1}\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this beta installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
             <p style="margin:0 0 8px;color:#2563eb;font-size:12px;font-weight:800;text-transform:uppercase">FlowBridge access</p>
             <h1 style="font-size:26px;line-height:1.1;margin:0 0 14px;color:#07111f">Your FlowBridge download is ready</h1>
             <p style="margin:0 0 18px">Thanks for joining FlowBridge. Start with the download, then follow the short install guide.</p>
+            <div style="margin:0 0 18px;padding:14px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa">
+              <p style="margin:0 0 6px;color:#0f766e;font-size:12px;font-weight:800;text-transform:uppercase">Your license key</p>
+              <p style="margin:0;font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;letter-spacing:.04em;color:#07111f">${license.license_key}</p>
+              <p style="margin:8px 0 0;color:#475569;font-size:13px">${license.plan || "Solo"} plan · ${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""}</p>
+            </div>
             <p>
               <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
                 Download FlowBridge
@@ -214,13 +325,18 @@ async function handler(request, response) {
       return;
     }
 
-    await sendPurchaseEmail(String(email).trim().toLowerCase());
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const planInfo = findPurchasedPlan(event);
+    const transactionId = findTransactionId(event) || null;
+    const license = await createLicense(normalizedEmail, customerId, transactionId, planInfo);
+
+    await sendPurchaseEmail(normalizedEmail, license);
     await saveWebhookLog({
       status: "sent",
       event_type: eventType,
       customer_id: customerId,
-      email: String(email).trim().toLowerCase(),
-      message: "Purchase email sent",
+      email: normalizedEmail,
+      message: `Purchase email sent with license ${license.license_key}`,
     });
     send(response, { ok: true });
   } catch (error) {

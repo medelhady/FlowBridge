@@ -5,7 +5,7 @@ window.FLOWBRIDGE_SITE_DEFAULTS = {
   launchCopy: "Windows beta is open now with a 14-day trial. After the first 100 seats, yearly pricing returns to the regular plan.",
   launchClaimed: 34,
   launchTotal: 100,
-  downloadUrl: "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.zip",
+  downloadUrl: "https://github.com/medelhady/FlowBridge/releases/download/beta-v1/FlowBridge-Beta-v1.1-native-launcher.zip",
   soloMonthly: "$9",
   soloYearly: "$90",
   duoMonthly: "$15",
