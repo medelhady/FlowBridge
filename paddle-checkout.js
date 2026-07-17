@@ -10,7 +10,11 @@
     return window.flowbridgePricingState?.billing || "monthly";
   }
 
-  function getPriceId(plan, billing) {
+  function getPriceId(plan, billing, priceKey) {
+    if (priceKey && config.prices?.[priceKey]) {
+      return config.prices[priceKey];
+    }
+
     return config.prices?.[plan]?.[billing];
   }
 
@@ -25,8 +29,8 @@
     return true;
   }
 
-  function openCheckout(plan, billing) {
-    const priceId = getPriceId(plan, billing);
+  function openCheckout(plan, billing, priceKey) {
+    const priceId = getPriceId(plan, billing, priceKey);
     const successUrl = config.successUrl || new URL("/success", window.location.origin).toString();
 
     if (!priceId) {
@@ -57,8 +61,9 @@
       event.preventDefault();
       event.stopPropagation();
       const plan = button.dataset.plan || getSelectedPlan();
-      const billing = getSelectedBilling();
-      openCheckout(plan, billing);
+      const billing = button.dataset.billing || getSelectedBilling();
+      const priceKey = button.dataset.priceKey || "";
+      openCheckout(plan, billing, priceKey);
     });
   });
 })();

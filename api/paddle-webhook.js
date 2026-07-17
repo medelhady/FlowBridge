@@ -6,6 +6,7 @@ const LICENSES_TABLE = "license_keys";
 const PRICE_PLANS = {
   pri_01kxg9hparr886d3qk06cmt1pz: { plan: "solo", billing: "monthly", devices: 1 },
   pri_01kxgdasy6ttq8tjh3g084c699: { plan: "solo", billing: "yearly", devices: 1 },
+  pri_01kxqz8pxkd5kgbbsx6yf4j996: { plan: "solo", billing: "launch-yearly", devices: 1 },
   pri_01kxgdtfrz4dkcmtex46s19p6w: { plan: "duo", billing: "monthly", devices: 2 },
   pri_01kxgdw20df49am0jrmv33s6fd: { plan: "duo", billing: "yearly", devices: 2 },
 };

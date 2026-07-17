@@ -4,6 +4,7 @@ window.FLOWBRIDGE_PADDLE = {
   clientToken: "live_1be7eb03e753c48617d882fd020",
   successUrl: "",
   prices: {
+    soloLaunchYearly: "pri_01kxqz8pxkd5kgbbsx6yf4j996",
     solo: {
       monthly: "pri_01kxg9hparr886d3qk06cmt1pz",
       yearly: "pri_01kxgdasy6ttq8tjh3g084c699",
