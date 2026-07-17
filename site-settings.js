@@ -11,7 +11,7 @@ window.FLOWBRIDGE_SITE_DEFAULTS = {
   duoMonthly: "$15",
   duoYearly: "$150",
   lifetimePrice: "$149",
-  lifetimeCopy: "Launch offer: $99 for the first 50 users, then $149. Includes FlowBridge features, future updates for one device, and early access to security improvements.",
+  lifetimeCopy: "Lock in lifetime access for one device, future updates, and early security improvements without another subscription.",
 };
 
 window.FLOWBRIDGE_SITE_SETTINGS = { ...window.FLOWBRIDGE_SITE_DEFAULTS };
