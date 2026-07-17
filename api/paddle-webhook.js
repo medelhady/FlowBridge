@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+﻿const crypto = require("crypto");
 const SUPABASE_URL = "https://sztjlrowzagweqwhvgpm.supabase.co";
 const WEBHOOK_LOGS_TABLE = "paddle_webhook_logs";
 const LICENSES_TABLE = "license_keys";
@@ -299,6 +299,20 @@ async function fetchCustomerEmail(customerId) {
   return payload && payload.data ? payload.data.email : null;
 }
 
+function formatLicensePlan(license) {
+  const plan = String(license.plan || "solo").toLowerCase();
+  const billing = String(license.billing || "").toLowerCase();
+
+  if (plan === "solo" && billing === "launch-yearly") {
+    return "Solo Launch Yearly";
+  }
+
+  const planName = plan === "duo" ? "Duo" : "Solo";
+  if (billing === "yearly") return `${planName} Yearly`;
+  if (billing === "monthly") return `${planName} Monthly`;
+  return `${planName} plan`;
+}
+
 async function sendPurchaseEmail(email, license) {
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
@@ -308,6 +322,8 @@ async function sendPurchaseEmail(email, license) {
   const trackedDownloadUrl = process.env.TRACKED_DOWNLOAD_URL || "https://useflowbridge.com/download";
   const installUrl = process.env.INSTALL_GUIDE_URL || "https://useflowbridge.com/install";
   const fromEmail = process.env.FROM_EMAIL || "FlowBridge <support@useflowbridge.com>";
+  const licensePlanLabel = formatLicensePlan(license);
+  const deviceText = `${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""}`;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -320,7 +336,7 @@ async function sendPurchaseEmail(email, license) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge download is ready",
-      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${license.plan || "solo"}\nDevices: ${license.device_limit || 1}\nFree trial: ${TRIAL_DAYS} days\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${licensePlanLabel}\nDevices: ${license.device_limit || 1}\nFree trial: ${TRIAL_DAYS} days\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
@@ -330,7 +346,7 @@ async function sendPurchaseEmail(email, license) {
             <div style="margin:0 0 18px;padding:14px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa">
               <p style="margin:0 0 6px;color:#0f766e;font-size:12px;font-weight:800;text-transform:uppercase">Your license key</p>
               <p style="margin:0;font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;letter-spacing:.04em;color:#07111f">${license.license_key}</p>
-              <p style="margin:8px 0 0;color:#475569;font-size:13px">${license.plan || "Solo"} plan · ${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""} · ${TRIAL_DAYS}-day free trial</p>
+              <p style="margin:8px 0 0;color:#475569;font-size:13px">${licensePlanLabel} - ${deviceText} - ${TRIAL_DAYS}-day free trial</p>
             </div>
             <p>
               <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
@@ -465,3 +481,4 @@ module.exports.config = {
     bodyParser: false,
   },
 };
+
