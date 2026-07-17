@@ -7,6 +7,7 @@ const PRICE_PLANS = {
   pri_01kxg9hparr886d3qk06cmt1pz: { plan: "solo", billing: "monthly", devices: 1 },
   pri_01kxgdasy6ttq8tjh3g084c699: { plan: "solo", billing: "yearly", devices: 1 },
   pri_01kxqz8pxkd5kgbbsx6yf4j996: { plan: "solo", billing: "launch-yearly", devices: 1 },
+  pri_01kxr203zs4bw4e3yharaa4q45: { plan: "solo", billing: "lifetime", devices: 1 },
   pri_01kxgdtfrz4dkcmtex46s19p6w: { plan: "duo", billing: "monthly", devices: 2 },
   pri_01kxgdw20df49am0jrmv33s6fd: { plan: "duo", billing: "yearly", devices: 2 },
 };
@@ -308,6 +309,7 @@ function formatLicensePlan(license) {
   }
 
   const planName = plan === "duo" ? "Duo" : "Solo";
+  if (billing === "lifetime") return `${planName} Lifetime`;
   if (billing === "yearly") return `${planName} Yearly`;
   if (billing === "monthly") return `${planName} Monthly`;
   return `${planName} plan`;
@@ -324,6 +326,9 @@ async function sendPurchaseEmail(email, license) {
   const fromEmail = process.env.FROM_EMAIL || "FlowBridge <support@useflowbridge.com>";
   const licensePlanLabel = formatLicensePlan(license);
   const deviceText = `${license.device_limit || 1} active device${Number(license.device_limit || 1) > 1 ? "s" : ""}`;
+  const accessText = String(license.billing || "").toLowerCase() === "lifetime"
+    ? "lifetime access"
+    : `${TRIAL_DAYS}-day free trial`;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -336,7 +341,7 @@ async function sendPurchaseEmail(email, license) {
       to: email,
       reply_to: "support@useflowbridge.com",
       subject: "Your FlowBridge download is ready",
-      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${licensePlanLabel}\nDevices: ${license.device_limit || 1}\nFree trial: ${TRIAL_DAYS} days\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
+      text: `Welcome to FlowBridge.\n\nYour license key:\n${license.license_key}\n\nPlan: ${licensePlanLabel}\nDevices: ${license.device_limit || 1}\nAccess: ${accessText}\n\nDownload FlowBridge:\n${trackedDownloadUrl}\n\nInstall guide:\n${installUrl}\n\nAfter download, extract the ZIP and open Install FlowBridge.bat.\n\nWindows may show an Unknown Publisher warning because this installer is not code-signed yet. Click Run to continue. If SmartScreen appears instead, click More info, then Run anyway.\n\nNeed help? Reply to this email or contact support@useflowbridge.com.`,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#0f172a;max-width:620px;margin:auto;padding:28px;background:#f8fafc">
           <div style="background:white;border:1px solid #e2e8f0;border-radius:18px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08)">
@@ -346,7 +351,7 @@ async function sendPurchaseEmail(email, license) {
             <div style="margin:0 0 18px;padding:14px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa">
               <p style="margin:0 0 6px;color:#0f766e;font-size:12px;font-weight:800;text-transform:uppercase">Your license key</p>
               <p style="margin:0;font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;letter-spacing:.04em;color:#07111f">${license.license_key}</p>
-              <p style="margin:8px 0 0;color:#475569;font-size:13px">${licensePlanLabel} - ${deviceText} - ${TRIAL_DAYS}-day free trial</p>
+              <p style="margin:8px 0 0;color:#475569;font-size:13px">${licensePlanLabel} - ${deviceText} - ${accessText}</p>
             </div>
             <p>
               <a href="${trackedDownloadUrl}" style="display:inline-block;background:#101827;color:white;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700">
