@@ -746,6 +746,46 @@ h3 {
   gap: 18px;
 }
 
+.dollar-offer {
+  max-width: 940px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 18px auto 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(34, 197, 94, 0.12), rgba(37, 99, 235, 0.08)),
+    rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 40px rgba(14, 17, 24, 0.07);
+}
+
+.dollar-offer span {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.dollar-offer strong {
+  color: var(--ink);
+  font-size: 19px;
+}
+
+.dollar-offer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.dollar-offer b {
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
 .launch-offer {
   display: none !important;
 }
@@ -1449,6 +1489,11 @@ h3 {
   .pricing-cta {
     grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  .dollar-offer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .launch-offer {
