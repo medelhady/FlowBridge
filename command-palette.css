@@ -747,6 +747,10 @@ h3 {
 }
 
 .launch-offer {
+  display: none !important;
+}
+
+.launch-offer-disabled {
   max-width: 1040px;
   width: 100%;
   display: grid;
