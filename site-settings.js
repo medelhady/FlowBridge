@@ -1,8 +1,8 @@
 window.FLOWBRIDGE_SITE_DEFAULTS = {
   betaGateEnabled: false,
-  launchLabel: "Limited launch offer",
-  launchTitle: "First 100 paid users get FlowBridge for $49/year.",
-  launchCopy: "Start with a 7-day free trial. After the first 100 seats, yearly pricing returns to the regular plan.",
+  launchLabel: "Launch offer",
+  launchTitle: "First month almost $1",
+  launchCopy: "Use code FLOWFIRST at checkout. Build faster, cancel anytime.",
   launchClaimed: 34,
   launchTotal: 100,
   downloadUrl: "https://www.useflowbridge.com/download",
