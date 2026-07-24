@@ -189,6 +189,7 @@ h3 {
 .earnings-card {
   position: relative;
   padding: 28px;
+  transform: translateY(-34px);
   border: 1px solid rgba(21, 93, 252, 0.24);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.88);
@@ -266,6 +267,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin-top: 8px;
   font-size: 64px;
   line-height: 1;
+}
+
+.earnings-caption {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.45;
 }
 
 .bonus-track {
@@ -414,6 +423,49 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-size: 20px;
 }
 
+.partner-test-box {
+  padding: 16px;
+  border: 1px solid rgba(12, 139, 103, 0.28);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(236, 253, 245, 0.96), rgba(239, 246, 255, 0.92));
+}
+
+.partner-test-box span {
+  display: block;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.partner-test-box strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.partner-test-box p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.partner-test-box code {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 7px;
+  border: 1px solid rgba(12, 139, 103, 0.25);
+  border-radius: 6px;
+  color: var(--green);
+  background: #fff;
+  font-weight: 950;
+}
+
 .payout-panel .primary-btn {
   width: 100%;
   margin-top: 22px;
@@ -489,8 +541,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 @keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(-34px);
+  }
+
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-48px);
   }
 }
 
@@ -508,6 +565,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
   .hero {
     min-height: auto;
+  }
+
+  .earnings-card {
+    transform: none;
+    animation: none;
   }
 }
 
